@@ -11,7 +11,7 @@ router.get("/:id", UserControllers.getUserController);
 
 router.patch("/:id", UserControllers.updateUserController);
 
-router.patch("/:id", UserControllers.updateUserStatusController);
+router.patch("/:id/status", UserControllers.updateUserStatusController);
 
 router.delete("/:id", UserControllers.deleteUserController)
 

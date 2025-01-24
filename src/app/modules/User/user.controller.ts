@@ -1,10 +1,10 @@
 import { UserServices } from "./user.service";
-import { asyncHandler } from "../../helpers/asyncHandler";
-import { sendResponse } from "../../helpers/sendResponse";
+import { asyncHandler } from "../../utils/global/asyncHandler";
+import { sendResponse } from "../../utils/global/sendResponse";
 
 const createUserController = asyncHandler(async (req, res) => {
     const userPayload = req.body;
-    const createdUser = UserServices.createUser(userPayload);
+    const createdUser = await UserServices.createUser(userPayload);
 
     sendResponse(res, {
         success: true,
