@@ -38,10 +38,28 @@ const updateUserById = async (id: string, payload: string) => {
     return updatedUser
 }
 
+const updateUserStatusById = async (id: string, status: string) => {
+    const validStatuses = ["active", "banned"];
+
+    if (!validStatuses.includes(status)) {
+        throw new Error(`Invalid status: ${status}`)
+    }
+
+    const updatedStatus = await User.findOneAndUpdate({ _id: id, isDeleted: false }, { status: status }, { new: true, runValidators: true })
+
+    if (!updatedStatus) {
+        throw new Error("No user found with ID")
+    }
+
+    return updatedStatus;
+
+}
+
 export const UserServices = {
     createUser,
     getAllUsers,
     getUserById,
     updateUserById,
+    updateUserStatusById,
 }
 
