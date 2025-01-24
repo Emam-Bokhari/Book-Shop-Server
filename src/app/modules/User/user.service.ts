@@ -7,7 +7,19 @@ const createUser = async (payload: TUser) => {
     return createdUser;
 };
 
+const getAllUsers = async () => {
+    const users = await User.find();
+
+    if (users.length === 0) {
+        throw new Error("No user record were found in the database")
+    }
+
+    return users;
+
+}
+
 export const UserServices = {
     createUser,
+    getAllUsers,
 }
 
