@@ -50,9 +50,23 @@ const updateUserController = asyncHandler(async (req, res) => {
     })
 })
 
+const updateUserStatusController = asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const { status } = req.body;
+    const updatedStatus = await UserServices.updateUserStatusById(id, status);
+
+    sendResponse(res, {
+        success: true,
+        message: "User status update successfully",
+        statusCode: 200,
+        data: updatedStatus
+    })
+})
+
 export const UserControllers = {
     createUserController,
     getAllUsersController,
     getUserController,
     updateUserController,
+    updateUserStatusController
 }
