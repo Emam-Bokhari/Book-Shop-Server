@@ -18,8 +18,19 @@ const getAllUsers = async () => {
 
 }
 
+const getUserById = async (id: string) => {
+    const user = await User.findById(id);
+
+    if (!user) {
+        throw new Error("No user found with ID")
+    }
+
+    return user;
+}
+
 export const UserServices = {
     createUser,
     getAllUsers,
+    getUserById,
 }
 
