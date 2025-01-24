@@ -1,17 +1,18 @@
-import { RequestHandler } from "express";
 import { UserServices } from "./user.service";
+import { asyncHandler } from "../../helpers/asyncHandler";
+import { sendResponse } from "../../helpers/sendResponse";
 
-const createUserController: RequestHandler = async (req, res) => {
+const createUserController = asyncHandler(async (req, res) => {
     const userPayload = req.body;
     const createdUser = UserServices.createUser(userPayload);
 
-    res.json({
+    sendResponse(res, {
         success: true,
         message: "User created successfully",
         statusCode: 201,
         data: createdUser
     })
-}
+})
 
 export const UserControllers = {
     createUserController,
