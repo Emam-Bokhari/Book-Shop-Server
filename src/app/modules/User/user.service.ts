@@ -28,9 +28,20 @@ const getUserById = async (id: string) => {
     return user;
 }
 
+const updateUserById = async (id: string, payload: string) => {
+    const updatedUser = await User.findOneAndUpdate({ _id: id, isDeleted: false }, { name: payload }, { new: true, runValidators: true });
+
+    if (!updatedUser) {
+        throw new Error("No user found with ID")
+    }
+
+    return updatedUser
+}
+
 export const UserServices = {
     createUser,
     getAllUsers,
     getUserById,
+    updateUserById,
 }
 
