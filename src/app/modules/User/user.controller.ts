@@ -14,6 +14,18 @@ const createUserController = asyncHandler(async (req, res) => {
     })
 })
 
+const getAllUsersController = asyncHandler(async (req, res) => {
+    const users = await UserServices.getAllUsers();
+
+    sendResponse(res, {
+        success: true,
+        message: "Users retrieved successfully",
+        statusCode: 200,
+        data: users,
+    })
+})
+
 export const UserControllers = {
     createUserController,
+    getAllUsersController,
 }
