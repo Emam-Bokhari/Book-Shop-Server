@@ -55,11 +55,22 @@ const updateUserStatusById = async (id: string, status: string) => {
 
 }
 
+const deleteUserById = async (id: string) => {
+    const deletedUser = await User.findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
+
+    if (!deletedUser) {
+        throw new Error("No user found with ID")
+    };
+
+    return deletedUser;
+}
+
 export const UserServices = {
     createUser,
     getAllUsers,
     getUserById,
     updateUserById,
     updateUserStatusById,
+    deleteUserById,
 }
 
