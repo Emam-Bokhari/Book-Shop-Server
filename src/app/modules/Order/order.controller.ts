@@ -37,8 +37,22 @@ const getOrderController = asyncHandler(async (req, res) => {
     })
 })
 
+const updateOrderStatusController = asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const { status } = req.body;
+    const updatedStatus = await OrderServices.updateOrderStatusById(id, status)
+
+    sendResponse(res, {
+        success: true,
+        message: "Order status updated successfully",
+        statusCode: 200,
+        data: updatedStatus
+    })
+})
+
 export const OrderControllers = {
-    createOrder: createOrderController,
+    createOrderController,
     getAllOrdersController,
     getOrderController,
+    updateOrderStatusController,
 }
