@@ -36,7 +36,7 @@ const shippingAddressSchema = new Schema<TShippingAddress>(
       trim: true,
       required: true,
     },
-    isDefault: {
+    isDeleted: {
       type: Boolean,
       default: false,
     },

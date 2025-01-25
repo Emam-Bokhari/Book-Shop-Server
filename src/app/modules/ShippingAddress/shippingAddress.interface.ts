@@ -8,5 +8,5 @@ export type TShippingAddress = {
   postalCode?: string;
   city: string;
   country: string;
-  isDefault?: boolean;
+  isDeleted?: boolean;
 };
