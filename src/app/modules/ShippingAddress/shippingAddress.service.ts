@@ -18,7 +18,19 @@ const getAllShippingAddress = async () => {
   return shippingAddresses;
 }
 
+const getShippingAddressById = async (id: string) => {
+  const shippingAddress = await ShippingAddress.findById(id);
+
+  if (!shippingAddress) {
+    throw new HttpError(404, "No shipping address found with ID")
+  };
+
+  return shippingAddress;
+
+}
+
 export const ShippingAddressServices = {
   createShippingAddress,
   getAllShippingAddress,
+  getShippingAddressById,
 };
