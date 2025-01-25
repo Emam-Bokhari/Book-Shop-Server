@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 import { TProduct } from "./product.interface";
+import { excludeDeletedAggregation, excludeDeletedQuery } from "../../utils/moduleSpecific/queryFilters";
 
 const productSchema = new Schema<TProduct>({
     title: {
@@ -91,5 +92,12 @@ const productSchema = new Schema<TProduct>({
         versionKey: false
     }
 );
+
+// query middleware for soft delete by utils
+productSchema.pre("find", excludeDeletedQuery);
+productSchema.pre("findOne", excludeDeletedQuery);
+
+// aggregate middleware for soft delete by utils
+productSchema.pre("aggregate", excludeDeletedAggregation)
 
 export const Product = model<TProduct>("Product", productSchema);
