@@ -1,18 +1,19 @@
 export type TProduct = {
     title: string;
-    category: "Fiction" | "Non-Fiction" | "Academic" | "Philosophy" | "Children" | "Science" | "Religion" | "History";
+    category: "fiction" | "nonFiction" | "academic" | "philosophy" | "children" | "science" | "religion" | "history";
     author: string;
     description: string;
     price: number;
     image: string;
     publisher: string;
     publishedDate: Date;
-    edition: string;
-    language: "Bengali" | "English" | "Arabic" | "Hindi" | "Spanish" | "French" | "German";
+    edition?: string;
+    language: "bengali" | "english" | "arabic" | "hindi" | "spanish" | "french" | "german";
     pages?: number;
     rating: number;
     discount?: number;
-    format: "Hardcover" | "Paperback" | "eBook" | "AudioBook";
+    format: "hardcover" | "paperback" | "eBook" | "audioBook";
+    quantity: number;
     availability?: boolean;
     isDeleted?: boolean;
 }
