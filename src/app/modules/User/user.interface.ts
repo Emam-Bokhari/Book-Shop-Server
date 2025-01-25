@@ -1,8 +1,8 @@
 export type TUser = {
-    name: string;
-    email: string;
-    password: string;
-    role?: "user" | "admin";
-    status?: "active" | "banned";
-    isDeleted?: false;
-}
+  name: string;
+  email: string;
+  password: string;
+  role?: 'user' | 'admin';
+  status?: 'active' | 'banned';
+  isDeleted?: false;
+};
