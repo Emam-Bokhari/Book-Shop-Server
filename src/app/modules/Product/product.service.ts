@@ -38,9 +38,19 @@ const updateProductById = async (id: string, payload: Partial<TProduct>) => {
     return updatedProduct;
 }
 
+const deleteProductById = async (id: string) => {
+    const deletedProduct = await Product.findOneAndUpdate({ _id: id, isDeleted: false }, { isDeleted: true }, { new: true });
+    if (!deletedProduct) {
+        throw new HttpError(404, "No product found with ID");
+    }
+
+    return deletedProduct;
+}
+
 export const ProductServices = {
     createProduct,
     getAllProducts,
     getProductById,
     updateProductById,
+    deleteProductById,
 }
