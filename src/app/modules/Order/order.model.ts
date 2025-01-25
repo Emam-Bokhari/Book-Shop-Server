@@ -1,5 +1,37 @@
 import { model, Schema } from "mongoose";
-import { TOrder } from "./order.interface";
+import { TOrder, TShippingAddressDetails } from "./order.interface";
+
+const shippingAddressDetailsSchema = new Schema<TShippingAddressDetails>({
+    name: {
+        type: String,
+        trim: true,
+        required: true,
+    },
+    phone: {
+        type: String,
+        trim: true,
+        required: true,
+    },
+    address: {
+        type: String,
+        trim: true,
+        required: true,
+    },
+    postalCode: {
+        type: String,
+        trim: true,
+    },
+    city: {
+        type: String,
+        trim: true,
+        required: true,
+    },
+    country: {
+        type: String,
+        trim: true,
+        required: true,
+    }
+})
 
 const orderSchema = new Schema<TOrder>({
     userId: {
@@ -35,6 +67,10 @@ const orderSchema = new Schema<TOrder>({
     },
     shippingAddress: {
         type: Schema.Types.ObjectId,
+        // ref:"ShippingAddress",
+    },
+    shippingAddressDetails: {
+        type: shippingAddressDetailsSchema,
     },
     status: {
         type: String,
@@ -46,6 +82,7 @@ const orderSchema = new Schema<TOrder>({
     },
     orderDate: {
         type: Date,
+        default: Date.now
     },
 
 },
