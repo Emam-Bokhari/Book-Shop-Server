@@ -14,6 +14,18 @@ const createOrder = asyncHandler(async (req, res) => {
     })
 })
 
+const getAllOrdersController = asyncHandler(async (req, res) => {
+    const orders = await OrderServices.getAllOrders();
+
+    sendResponse(res, {
+        success: true,
+        message: "Orders retrieved successfully",
+        statusCode: 200,
+        data: orders,
+    })
+})
+
 export const OrderControllers = {
     createOrder,
+    getAllOrdersController,
 }
