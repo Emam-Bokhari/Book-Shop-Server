@@ -75,7 +75,18 @@ const getAllOrders = async () => {
     return orders;
 }
 
+const getOrderById = async (id: string) => {
+    const order = await Order.findById(id);
+
+    if (!order) {
+        throw new HttpError(404, "No order found with ID")
+    }
+
+    return order;
+}
+
 export const OrderServices = {
     createOrder,
     getAllOrders,
+    getOrderById,
 }
