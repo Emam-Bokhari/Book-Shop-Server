@@ -14,6 +14,5 @@ export type TProduct = {
     discount?: number;
     format: "hardcover" | "paperback" | "eBook" | "audioBook";
     quantity: number;
-    availability?: boolean;
     isDeleted?: boolean;
 }

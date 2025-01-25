@@ -81,10 +81,6 @@ const productSchema = new Schema<TProduct>({
         trim: true,
         required: true,
     },
-    availability: {
-        type: Boolean,
-        default: true,
-    },
     isDeleted: {
         type: Boolean,
         default: false,
