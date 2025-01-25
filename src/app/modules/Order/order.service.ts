@@ -65,6 +65,17 @@ const createOrder = async (payload: TOrder) => {
 
 }
 
+const getAllOrders = async () => {
+    const orders = await Order.find();
+
+    if (orders.length === 0) {
+        throw new HttpError(404, "No order were found in the database")
+    }
+
+    return orders;
+}
+
 export const OrderServices = {
     createOrder,
+    getAllOrders,
 }
