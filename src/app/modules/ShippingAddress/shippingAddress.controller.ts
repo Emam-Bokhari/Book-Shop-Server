@@ -38,8 +38,22 @@ const getShippingAddressController = asyncHandler(async (req, res) => {
   })
 })
 
+const updatedShippingAddressController = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const updatedPayload = req.body;
+  const updatedShippingAddress = await ShippingAddressServices.updateShippingAddressById(id, updatedPayload);
+
+  sendResponse(res, {
+    success: true,
+    message: "Shipping address updated successfully",
+    statusCode: 200,
+    data: updatedShippingAddress,
+  })
+})
+
 export const ShippingAddressControllers = {
   createShippingAddressController,
   getAllShippingAddressController,
   getShippingAddressController,
+  updatedShippingAddress: updatedShippingAddressController,
 };
