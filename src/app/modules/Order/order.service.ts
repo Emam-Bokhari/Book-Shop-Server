@@ -85,8 +85,26 @@ const getOrderById = async (id: string) => {
     return order;
 }
 
+const updateOrderStatusById = async (id: string, status: string) => {
+    const validStatuses = ["pending", "shipping", "delivered", "cancelled"];
+
+    if (!validStatuses.includes(status)) {
+        throw new HttpError(400, `Invalid status: ${status}`)
+    }
+
+    const updatedStatus = await Order.findOneAndUpdate({ _id: id }, { status: status }, { new: true, runValidators: true })
+
+    if (!updatedStatus) {
+        throw new HttpError(404, "No order found with ID")
+    }
+
+    return updatedStatus;
+
+}
+
 export const OrderServices = {
     createOrder,
     getAllOrders,
     getOrderById,
+    updateOrderStatusById,
 }
