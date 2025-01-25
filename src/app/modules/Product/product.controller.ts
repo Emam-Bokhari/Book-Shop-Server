@@ -37,8 +37,22 @@ const getProductController = asyncHandler(async (req, res) => {
     })
 })
 
+const updateProductController = asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const updatedPayload = req.body;
+    const updatedProduct = await ProductServices.updateProductById(id, updatedPayload);
+
+    sendResponse(res, {
+        success: true,
+        message: "Product updated successfully",
+        statusCode: 200,
+        data: updatedProduct,
+    })
+})
+
 export const ProductControllers = {
     createProductController,
     getAllProductsController,
     getProductController,
+    updateProductController,
 }
