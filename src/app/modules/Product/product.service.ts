@@ -19,7 +19,17 @@ const getAllProducts = async () => {
     return products;
 }
 
+const getProductById = async (id: string) => {
+    const product = await Product.findById(id);
+
+    if (!product) {
+        throw new HttpError(404, "No product found with ID")
+    }
+    return product;
+}
+
 export const ProductServices = {
     createProduct,
     getAllProducts,
+    getProductById,
 }
