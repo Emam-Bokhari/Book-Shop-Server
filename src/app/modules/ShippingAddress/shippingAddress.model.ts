@@ -1,5 +1,9 @@
 import { model, Schema } from 'mongoose';
 import { TShippingAddress } from './shippingAddress.interface';
+import {
+  excludeDeletedAggregation,
+  excludeDeletedQuery,
+} from '../../utils/moduleSpecific/queryFilters';
 
 const shippingAddressSchema = new Schema<TShippingAddress>(
   {
@@ -36,7 +40,7 @@ const shippingAddressSchema = new Schema<TShippingAddress>(
       trim: true,
       required: true,
     },
-    isDefault: {
+    isDeleted: {
       type: Boolean,
       default: false,
     },
@@ -46,5 +50,12 @@ const shippingAddressSchema = new Schema<TShippingAddress>(
     versionKey: false,
   },
 );
+
+// query middleware for soft delete by utils
+shippingAddressSchema.pre('find', excludeDeletedQuery);
+shippingAddressSchema.pre('findOne', excludeDeletedQuery);
+
+// aggregate middleware for soft delete by utils
+shippingAddressSchema.pre('aggregate', excludeDeletedAggregation);
 
 export const ShippingAddress = model('ShippingAddress', shippingAddressSchema);

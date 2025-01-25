@@ -12,13 +12,57 @@ const getAllShippingAddress = async () => {
   const shippingAddresses = await ShippingAddress.find();
 
   if (shippingAddresses.length === 0) {
-    throw new HttpError(404, "No shipping address were found in the database")
-  };
+    throw new HttpError(404, 'No shipping address were found in the database');
+  }
 
   return shippingAddresses;
-}
+};
+
+const getShippingAddressById = async (id: string) => {
+  const shippingAddress = await ShippingAddress.findById(id);
+
+  if (!shippingAddress) {
+    throw new HttpError(404, 'No shipping address found with ID');
+  }
+
+  return shippingAddress;
+};
+
+const updateShippingAddressById = async (
+  id: string,
+  payload: Partial<TShippingAddress>,
+) => {
+  const updatedShippingAddress = await ShippingAddress.findOneAndUpdate(
+    { _id: id, isDeleted: false },
+    payload,
+    { new: true, runValidators: true },
+  );
+
+  if (!updatedShippingAddress) {
+    throw new HttpError(404, 'No shipping address found with ID');
+  }
+
+  return updatedShippingAddress;
+};
+
+const deleteShippingAddressById = async (id: string) => {
+  const deletedShippingAddress = await ShippingAddress.findOneAndUpdate(
+    { _id: id, isDeleted: false },
+    { isDeleted: true },
+    { new: true },
+  );
+
+  if (!deletedShippingAddress) {
+    throw new HttpError(404, 'No shipping address found with ID');
+  }
+
+  return deletedShippingAddress;
+};
 
 export const ShippingAddressServices = {
   createShippingAddress,
   getAllShippingAddress,
+  getShippingAddressById,
+  updateShippingAddressById,
+  deleteShippingAddressById,
 };
