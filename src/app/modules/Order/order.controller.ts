@@ -2,7 +2,7 @@ import { asyncHandler } from "../../utils/global/asyncHandler";
 import { sendResponse } from "../../utils/global/sendResponse";
 import { OrderServices } from "./order.service";
 
-const createOrder = asyncHandler(async (req, res) => {
+const createOrderController = asyncHandler(async (req, res) => {
     const orderPayload = req.body;
     const createdOrder = await OrderServices.createOrder(orderPayload);
 
@@ -25,7 +25,20 @@ const getAllOrdersController = asyncHandler(async (req, res) => {
     })
 })
 
+const getOrderController = asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const order = await OrderServices.getOrderById(id);
+
+    sendResponse(res, {
+        success: true,
+        message: "Order retrieved successfully",
+        statusCode: 200,
+        data: order,
+    })
+})
+
 export const OrderControllers = {
-    createOrder,
+    createOrder: createOrderController,
     getAllOrdersController,
+    getOrderController,
 }
