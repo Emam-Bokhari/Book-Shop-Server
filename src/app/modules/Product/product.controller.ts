@@ -25,7 +25,20 @@ const getAllProductsController = asyncHandler(async (req, res) => {
     })
 })
 
+const getProductController = asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const product = await ProductServices.getProductById(id);
+
+    sendResponse(res, {
+        success: true,
+        message: "Product retrieved successfully",
+        statusCode: 200,
+        data: product
+    })
+})
+
 export const ProductControllers = {
     createProductController,
     getAllProductsController,
+    getProductController,
 }
