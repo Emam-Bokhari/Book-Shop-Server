@@ -51,9 +51,22 @@ const updatedShippingAddressController = asyncHandler(async (req, res) => {
   })
 })
 
+const deleteShippingAddressController = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  await ShippingAddressServices.deleteShippingAddressById(id);
+
+  sendResponse(res, {
+    success: true,
+    message: "Shipping address deleted successfully",
+    statusCode: 200,
+    data: {}
+  })
+})
+
 export const ShippingAddressControllers = {
   createShippingAddressController,
   getAllShippingAddressController,
   getShippingAddressController,
-  updatedShippingAddress: updatedShippingAddressController,
+  updatedShippingAddressController,
+  deleteShippingAddressController
 };
