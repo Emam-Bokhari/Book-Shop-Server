@@ -50,9 +50,22 @@ const updateProductController = asyncHandler(async (req, res) => {
     })
 })
 
+const deleteProductController = asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    await ProductServices.deleteProductById(id);
+
+    sendResponse(res, {
+        success: true,
+        message: "Product deleted successfully",
+        statusCode: 200,
+        data: {},
+    })
+})
+
 export const ProductControllers = {
     createProductController,
     getAllProductsController,
     getProductController,
     updateProductController,
+    deleteProductController,
 }
