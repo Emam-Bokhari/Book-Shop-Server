@@ -16,40 +16,43 @@ const createShippingAddressController = asyncHandler(async (req, res) => {
 });
 
 const getAllShippingAddressController = asyncHandler(async (req, res) => {
-  const shippingAddresses = await ShippingAddressServices.getAllShippingAddress();
+  const shippingAddresses =
+    await ShippingAddressServices.getAllShippingAddress();
 
   sendResponse(res, {
     success: true,
-    message: "Shipping addresses retrieved successfully",
+    message: 'Shipping addresses retrieved successfully',
     statusCode: 200,
     data: shippingAddresses,
-  })
-})
+  });
+});
 
 const getShippingAddressController = asyncHandler(async (req, res) => {
   const id = req.params.id;
-  const shippingAddress = await ShippingAddressServices.getShippingAddressById(id);
+  const shippingAddress =
+    await ShippingAddressServices.getShippingAddressById(id);
 
   sendResponse(res, {
     success: true,
-    message: "Shipping address retrieved successfully",
+    message: 'Shipping address retrieved successfully',
     statusCode: 200,
     data: shippingAddress,
-  })
-})
+  });
+});
 
 const updatedShippingAddressController = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const updatedPayload = req.body;
-  const updatedShippingAddress = await ShippingAddressServices.updateShippingAddressById(id, updatedPayload);
+  const updatedShippingAddress =
+    await ShippingAddressServices.updateShippingAddressById(id, updatedPayload);
 
   sendResponse(res, {
     success: true,
-    message: "Shipping address updated successfully",
+    message: 'Shipping address updated successfully',
     statusCode: 200,
     data: updatedShippingAddress,
-  })
-})
+  });
+});
 
 const deleteShippingAddressController = asyncHandler(async (req, res) => {
   const id = req.params.id;
@@ -57,16 +60,16 @@ const deleteShippingAddressController = asyncHandler(async (req, res) => {
 
   sendResponse(res, {
     success: true,
-    message: "Shipping address deleted successfully",
+    message: 'Shipping address deleted successfully',
     statusCode: 200,
-    data: {}
-  })
-})
+    data: {},
+  });
+});
 
 export const ShippingAddressControllers = {
   createShippingAddressController,
   getAllShippingAddressController,
   getShippingAddressController,
   updatedShippingAddressController,
-  deleteShippingAddressController
+  deleteShippingAddressController,
 };

@@ -68,7 +68,7 @@ const orderSchema = new Schema<TOrder>(
     },
     shippingAddress: {
       type: Schema.Types.ObjectId,
-      // ref:"ShippingAddress",
+      ref: 'ShippingAddress',
     },
     shippingAddressDetails: {
       type: shippingAddressDetailsSchema,

@@ -5,12 +5,18 @@ const router = express.Router();
 
 router.post('/', ShippingAddressControllers.createShippingAddressController);
 
-router.get("/", ShippingAddressControllers.getAllShippingAddressController);
+router.get('/', ShippingAddressControllers.getAllShippingAddressController);
 
-router.get("/:id", ShippingAddressControllers.getShippingAddressController);
+router.get('/:id', ShippingAddressControllers.getShippingAddressController);
 
-router.patch("/:id", ShippingAddressControllers.updatedShippingAddressController);
+router.patch(
+  '/:id',
+  ShippingAddressControllers.updatedShippingAddressController,
+);
 
-router.delete("/:id", ShippingAddressControllers.deleteShippingAddressController);
+router.delete(
+  '/:id',
+  ShippingAddressControllers.deleteShippingAddressController,
+);
 
 export const ShippingAddressRoutes = router;
