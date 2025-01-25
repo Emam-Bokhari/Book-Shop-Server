@@ -1,9 +1,14 @@
 import { model, Schema } from "mongoose";
+import { TShippingAddress } from "./shippingAddress.interface";
 
-const shippingAddressSchema = new Schema({
+const shippingAddressSchema = new Schema<TShippingAddress>({
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    },
     name: {
         type: String,
-        trim: true,
+        enum: ["home", "office", "other"],
         required: true,
     },
     phone: {
@@ -29,7 +34,16 @@ const shippingAddressSchema = new Schema({
         type: String,
         trim: true,
         required: true,
+    },
+    isDefault: {
+        type: Boolean,
+        default: false,
     }
-})
+},
+    {
+        timestamps: true,
+        versionKey: false
+    }
+)
 
 export const ShippingAddress = model("ShippingAddress", shippingAddressSchema)

@@ -1,6 +1,7 @@
 import { HttpError } from "../../errors/HttpError";
 import { Product } from "../Product/product.model";
-import { TOrder } from "./order.interface";
+import { ShippingAddress } from "../ShippingAddress/shippingAddress.model";
+import { TOrder, TShippingAddressDetails } from "./order.interface";
 import { Order } from "./order.model";
 
 const createOrder = async (payload: TOrder) => {
@@ -23,13 +24,42 @@ const createOrder = async (payload: TOrder) => {
         throw new HttpError(400, "Product is currently unavailable. Please check back later or choose another product.")
     }
 
+
     // handle shipping address
+    let finalShippingAddress: TShippingAddressDetails | null = null;
+
     if (!payload.shippingAddress && !payload.shippingAddressDetails) {
         throw new HttpError(400, "Shipping address is required.")
     }
 
+    if (payload.shippingAddress) {
+        // check if default shipping address
+        const defaultShippingAddress = await ShippingAddress.findOne({ _id: payload.shippingAddress })
+
+
+        if (!defaultShippingAddress) {
+            throw new HttpError(404, "No default shipping address found with ID");
+        };
+
+        finalShippingAddress = {
+            name: defaultShippingAddress.name,
+            phone: defaultShippingAddress.phone,
+            address: defaultShippingAddress.address,
+            postalCode: defaultShippingAddress.postalCode,
+            city: defaultShippingAddress.city,
+            country: defaultShippingAddress.country,
+        }
+
+    } else if (payload.shippingAddressDetails) {
+        finalShippingAddress = payload.shippingAddressDetails
+    }
+
+
     // create the order 
-    const createdOrder = await Order.create(payload);
+    const createdOrder = await Order.create({
+        ...payload,
+        shippingAddressDetails: finalShippingAddress,
+    });
 
     return createdOrder;
 

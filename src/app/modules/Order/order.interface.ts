@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 
 export type TShippingAddressDetails = {
-    name: string;
+    name: "home" | "office" | "other";
     phone: string;
     address: string;
     postalCode?: string;

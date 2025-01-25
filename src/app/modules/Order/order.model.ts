@@ -4,7 +4,7 @@ import { TOrder, TShippingAddressDetails } from "./order.interface";
 const shippingAddressDetailsSchema = new Schema<TShippingAddressDetails>({
     name: {
         type: String,
-        trim: true,
+        enum: ["home", "office", "other"],
         required: true,
     },
     phone: {

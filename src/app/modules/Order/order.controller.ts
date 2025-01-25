@@ -10,7 +10,7 @@ const createOrder = asyncHandler(async (req, res) => {
         success: true,
         message: "Order created successfully",
         statusCode: 201,
-        data: null,
+        data: createdOrder,
     })
 })
 

@@ -1,8 +1,12 @@
+import { Types } from "mongoose";
+
 export type TShippingAddress = {
-    name: string;
+    userId?: Types.ObjectId;
+    name: "home" | "office" | "other";
     phone: string;
     address: string;
     postalCode?: string;
     city: string;
     country: string;
+    isDefault?: boolean;
 }
