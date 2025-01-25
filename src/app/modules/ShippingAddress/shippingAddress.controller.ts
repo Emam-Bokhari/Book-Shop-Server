@@ -20,13 +20,26 @@ const getAllShippingAddressController = asyncHandler(async (req, res) => {
 
   sendResponse(res, {
     success: true,
-    message: "Shipping address retrieved successfully",
+    message: "Shipping addresses retrieved successfully",
     statusCode: 200,
     data: shippingAddresses,
+  })
+})
+
+const getShippingAddressController = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const shippingAddress = await ShippingAddressServices.getShippingAddressById(id);
+
+  sendResponse(res, {
+    success: true,
+    message: "Shipping address retrieved successfully",
+    statusCode: 200,
+    data: shippingAddress,
   })
 })
 
 export const ShippingAddressControllers = {
   createShippingAddressController,
   getAllShippingAddressController,
+  getShippingAddressController,
 };
