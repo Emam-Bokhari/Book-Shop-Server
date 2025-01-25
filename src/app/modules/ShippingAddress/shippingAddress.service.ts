@@ -39,9 +39,20 @@ const updateShippingAddressById = async (id: string, payload: Partial<TShippingA
   return updatedShippingAddress;
 }
 
+const deleteShippingAddressById = async (id: string) => {
+  const deletedShippingAddress = await ShippingAddress.findOneAndUpdate({ _id: id, isDeleted: false }, { isDeleted: true }, { new: true });
+
+  if (!deletedShippingAddress) {
+    throw new HttpError(404, "No shipping address found with ID")
+  };
+
+  return deletedShippingAddress;
+}
+
 export const ShippingAddressServices = {
   createShippingAddress,
   getAllShippingAddress,
   getShippingAddressById,
   updateShippingAddressById,
+  deleteShippingAddressById,
 };
