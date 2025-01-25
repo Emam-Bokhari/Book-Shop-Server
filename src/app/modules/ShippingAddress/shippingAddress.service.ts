@@ -29,8 +29,19 @@ const getShippingAddressById = async (id: string) => {
 
 }
 
+const updateShippingAddressById = async (id: string, payload: Partial<TShippingAddress>) => {
+  const updatedShippingAddress = await ShippingAddress.findOneAndUpdate({ _id: id, isDeleted: false }, payload, { new: true, runValidators: true });
+
+  if (!updatedShippingAddress) {
+    throw new HttpError(404, "No shipping address found with ID")
+  };
+
+  return updatedShippingAddress;
+}
+
 export const ShippingAddressServices = {
   createShippingAddress,
   getAllShippingAddress,
   getShippingAddressById,
+  updateShippingAddressById,
 };
