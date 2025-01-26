@@ -6,13 +6,13 @@ import { Order } from './order.model';
 import { generateTransactionId } from './order.utils';
 import { SSLCommerzService } from './sslcommerz.service';
 
+type TOrderResponse = {
+  createdOrder: TOrder;
+  paymentUrl: string;
+};
 
-const createOrder = async (payload: TOrder) => {
+const createOrder = async (payload: TOrder): Promise<TOrderResponse> => {
   // TODO: check if user is exists
-  // TODO: check if payment method ssl/cashOnDelivery
-  // TODO: if payment method ssl, then check if payment status is confirmed
-  // TODO: if payment method is ssl , then payment status update pending to confirmed
-  // TODO: if payment is completed then, less product quantity
 
   const product = await Product.findOne({ _id: payload.product });
 
@@ -31,8 +31,7 @@ const createOrder = async (payload: TOrder) => {
 
   // total amount of product
   const totalAmount = product.price * payload.quantity;
-
-  // console.log(totalAmount)
+  payload.totalAmount = totalAmount
 
   // handle shipping address
   let finalShippingAddress: TShippingAddressDetails | null = null;
@@ -68,7 +67,6 @@ const createOrder = async (payload: TOrder) => {
   if (payload.paymentMethod === "sslCommerz") {
 
     const transactionId = generateTransactionId();
-    // console.log(transactionId)
 
     try {
       const paymentResponse = await SSLCommerzService.initiatePayment({
@@ -98,24 +96,41 @@ const createOrder = async (payload: TOrder) => {
 
       payload.transactionId = transactionId
 
-      return paymentResponse.GatewayPageURL;
+      const createdOrder = await Order.create({
+        ...payload,
+        shippingAddressDetails: finalShippingAddress,
+        transactionId,
+      });
 
-    } catch (error) {
+      createdOrder.paymentStatus = "completed"
+      await createdOrder.save()
+      await Product.findOneAndUpdate({ _id: payload.product }, { $inc: { quantity: -payload.quantity } })
+
+      return {
+        createdOrder,
+        paymentUrl: paymentResponse
+      }
+
+    } catch (err) {
       throw new HttpError(500, 'Failed to initiate payment.');
 
     }
 
   }
 
-
   // create the order
   const createdOrder = await Order.create({
     ...payload,
     shippingAddressDetails: finalShippingAddress,
+
   });
 
-  return null;
+  // decrease product quantity after creating the order
+  await Product.findOneAndUpdate({ _id: payload.product }, { $inc: { quantity: -payload.quantity } })
+
+  return { createdOrder, paymentUrl: "" };
 };
+
 
 const getAllOrders = async () => {
   const orders = await Order.find();

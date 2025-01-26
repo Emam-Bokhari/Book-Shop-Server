@@ -15,7 +15,7 @@ export type TOrder = {
   quantity: number;
   totalAmount?: number;
   paymentMethod: 'sslCommerz' | 'cashOnDelivery';
-  paymentStatus?: 'pending' | 'completed' | 'failed';
+  paymentStatus?: 'pending' | 'completed' | 'failed' | "canceled";
   shippingAddress?: Types.ObjectId;
   shippingAddressDetails?: TShippingAddressDetails;
   status: 'pending' | 'shipping' | 'delivered';

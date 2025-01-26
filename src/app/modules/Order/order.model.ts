@@ -61,7 +61,7 @@ const orderSchema = new Schema<TOrder>(
     paymentStatus: {
       type: String,
       enum: {
-        values: ['pending', 'completed', 'failed'],
+        values: ['pending', 'completed', 'failed', "canceled"],
         message: '{VALUE} is not a valid payment status',
       },
       default: 'pending',

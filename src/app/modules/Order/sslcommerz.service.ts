@@ -22,29 +22,6 @@ const initiatePayment = async (paymentData) => {
     }
 }
 
-const verifyPayment = async (tran_id: string) => {
-    try {
-        const response = await axios.post("https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php", {
-            val_id: tran_id,
-            tran_id: tran_id,
-            store_id: store_id,
-            store_pass: store_pass,
-        })
-
-        const paymentData = response.data;
-
-        if (paymentData.status === "VALID") {
-            return "SUCCESS";
-        } else {
-            return "FAILURE"
-        }
-
-    } catch (err) {
-        console.log(err)
-    }
-}
-
 export const SSLCommerzService = {
     initiatePayment,
-    verifyPayment,
 }
