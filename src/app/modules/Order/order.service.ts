@@ -103,11 +103,11 @@ const createOrder = async (payload: TOrder): Promise<TOrderResponse> => {
       const createdOrder = await Order.create({
         ...payload,
         shippingAddressDetails: finalShippingAddress,
-        transactionId,
+        // transactionId,
       });
 
-      createdOrder.paymentStatus = 'completed';
-      await createdOrder.save();
+
+      // decrease product quantity after creating the order
       await Product.findOneAndUpdate(
         { _id: payload.product },
         { $inc: { quantity: -payload.quantity } },

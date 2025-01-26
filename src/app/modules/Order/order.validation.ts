@@ -1,0 +1,35 @@
+import { z } from "zod";
+
+const createShippingAddressDetailsValidationSchema = z.object({
+    name: z.enum(["home", "office", "other"]),
+    phone: z.string().trim(),
+    address: z.string().trim().max(200, "Address can not exceed 200 characters"),
+    postalCode: z.string().trim(),
+    city: z.string().trim().max(100, "City can not exceed 100 characters"),
+    country: z.string().trim().max(100, "Country can not exceed 100 characters")
+});
+
+
+
+const createOrderValidationSchema = z.object({
+    body: z.object({
+        userId: z.string().optional(),
+        product: z.string(),
+        quantity: z.number().int(),
+        totalAmount: z.number().optional(),
+        paymentMethod: z.enum(["sslCommerz", "cashOnDelivery"]),
+        paymentStatus: z.enum(["pending", "completed", "failed", "canceled"]).default("pending"),
+        shippingAddress: z.string().optional(),
+        shippingAddressDetails: createShippingAddressDetailsValidationSchema.optional(),
+        status: z.enum(["pending", "shipping", "delivered"]).default("pending"),
+        orderDate: z.string().optional(),
+        transactionId: z.string().optional()
+    })
+})
+
+
+
+export const OrderValidationSchema = {
+    createOrderValidationSchema,
+
+}
