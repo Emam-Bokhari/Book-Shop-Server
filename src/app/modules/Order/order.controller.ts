@@ -5,11 +5,11 @@ import { Document } from 'mongoose';
 
 const createOrderController = asyncHandler(async (req, res) => {
   const orderPayload = req.body;
-  const { createdOrder, paymentUrl } = await OrderServices.createOrder(orderPayload);
+  const { createdOrder, paymentUrl } =
+    await OrderServices.createOrder(orderPayload);
 
-
-  const orderData = createdOrder instanceof Document ? createdOrder.toObject() : createdOrder;
-
+  const orderData =
+    createdOrder instanceof Document ? createdOrder.toObject() : createdOrder;
 
   sendResponse(res, {
     success: true,

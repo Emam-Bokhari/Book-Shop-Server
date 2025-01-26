@@ -31,7 +31,7 @@ const createOrder = async (payload: TOrder): Promise<TOrderResponse> => {
 
   // total amount of product
   const totalAmount = product.price * payload.quantity;
-  payload.totalAmount = totalAmount
+  payload.totalAmount = totalAmount;
 
   // handle shipping address
   let finalShippingAddress: TShippingAddressDetails | null = null;
@@ -64,8 +64,7 @@ const createOrder = async (payload: TOrder): Promise<TOrderResponse> => {
 
   // payment method integration
   // if payment method is sslCommerz, initiate the payment
-  if (payload.paymentMethod === "sslCommerz") {
-
+  if (payload.paymentMethod === 'sslCommerz') {
     const transactionId = generateTransactionId();
 
     try {
@@ -77,24 +76,24 @@ const createOrder = async (payload: TOrder): Promise<TOrderResponse> => {
         fail_url: 'https://yourdomain.com/api/payment/fail',
         cancel_url: 'https://yourdomain.com/api/payment/cancel',
         shipping_method: 'Courier',
-        product_name: product.title || "",
-        product_category: product.category || "",
+        product_name: product.title || '',
+        product_category: product.category || '',
         product_profile: 'general',
         cus_name: 'Customer Name',
         cus_email: 'customer@example.com',
-        cus_add1: finalShippingAddress?.address || "",
-        cus_city: finalShippingAddress?.city || "",
-        cus_postcode: finalShippingAddress?.postalCode || "",
-        cus_country: finalShippingAddress?.country || "",
-        cus_phone: finalShippingAddress?.phone || "",
+        cus_add1: finalShippingAddress?.address || '',
+        cus_city: finalShippingAddress?.city || '',
+        cus_postcode: finalShippingAddress?.postalCode || '',
+        cus_country: finalShippingAddress?.country || '',
+        cus_phone: finalShippingAddress?.phone || '',
         ship_name: 'Customer Name',
-        ship_add1: finalShippingAddress?.address || "",
-        ship_city: finalShippingAddress?.city || "",
-        ship_postcode: finalShippingAddress?.postalCode || "",
-        ship_country: finalShippingAddress?.country || "",
+        ship_add1: finalShippingAddress?.address || '',
+        ship_city: finalShippingAddress?.city || '',
+        ship_postcode: finalShippingAddress?.postalCode || '',
+        ship_country: finalShippingAddress?.country || '',
       });
 
-      payload.transactionId = transactionId
+      payload.transactionId = transactionId;
 
       const createdOrder = await Order.create({
         ...payload,
@@ -102,35 +101,36 @@ const createOrder = async (payload: TOrder): Promise<TOrderResponse> => {
         transactionId,
       });
 
-      createdOrder.paymentStatus = "completed"
-      await createdOrder.save()
-      await Product.findOneAndUpdate({ _id: payload.product }, { $inc: { quantity: -payload.quantity } })
+      createdOrder.paymentStatus = 'completed';
+      await createdOrder.save();
+      await Product.findOneAndUpdate(
+        { _id: payload.product },
+        { $inc: { quantity: -payload.quantity } },
+      );
 
       return {
         createdOrder,
-        paymentUrl: paymentResponse
-      }
-
+        paymentUrl: paymentResponse,
+      };
     } catch (err) {
       throw new HttpError(500, 'Failed to initiate payment.');
-
     }
-
   }
 
   // create the order
   const createdOrder = await Order.create({
     ...payload,
     shippingAddressDetails: finalShippingAddress,
-
   });
 
   // decrease product quantity after creating the order
-  await Product.findOneAndUpdate({ _id: payload.product }, { $inc: { quantity: -payload.quantity } })
+  await Product.findOneAndUpdate(
+    { _id: payload.product },
+    { $inc: { quantity: -payload.quantity } },
+  );
 
-  return { createdOrder, paymentUrl: "" };
+  return { createdOrder, paymentUrl: '' };
 };
-
 
 const getAllOrders = async () => {
   const orders = await Order.find();

@@ -15,7 +15,7 @@ export type TOrder = {
   quantity: number;
   totalAmount?: number;
   paymentMethod: 'sslCommerz' | 'cashOnDelivery';
-  paymentStatus?: 'pending' | 'completed' | 'failed' | "canceled";
+  paymentStatus?: 'pending' | 'completed' | 'failed' | 'canceled';
   shippingAddress?: Types.ObjectId;
   shippingAddressDetails?: TShippingAddressDetails;
   status: 'pending' | 'shipping' | 'delivered';
@@ -23,15 +23,14 @@ export type TOrder = {
   transactionId?: string;
 };
 
-
 export type TPaymentResponse = {
-  total_amount: number,
-  currency: string,
-  tran_id: string,
-  success_url: string,
-  fail_url: string,
-  cancel_url: string,
-  shipping_method: string,
+  total_amount: number;
+  currency: string;
+  tran_id: string;
+  success_url: string;
+  fail_url: string;
+  cancel_url: string;
+  shipping_method: string;
   product_name: string;
   product_category: string;
   product_profile: string;
@@ -47,5 +46,4 @@ export type TPaymentResponse = {
   ship_city: string;
   ship_postcode: string;
   ship_country: string;
-}
-
+};
