@@ -5,7 +5,7 @@ export type TShippingAddress = {
   name: 'home' | 'office' | 'other';
   phone: string;
   address: string;
-  postalCode?: string;
+  postalCode: string;
   city: string;
   country: string;
   isDeleted?: boolean;

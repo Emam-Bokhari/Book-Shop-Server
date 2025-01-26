@@ -1,16 +1,24 @@
 import { asyncHandler } from '../../utils/global/asyncHandler';
 import { sendResponse } from '../../utils/global/sendResponse';
 import { OrderServices } from './order.service';
+import { Document } from 'mongoose';
 
 const createOrderController = asyncHandler(async (req, res) => {
   const orderPayload = req.body;
-  const createdOrder = await OrderServices.createOrder(orderPayload);
+  const { createdOrder, paymentUrl } =
+    await OrderServices.createOrder(orderPayload);
+
+  const orderData =
+    createdOrder instanceof Document ? createdOrder.toObject() : createdOrder;
 
   sendResponse(res, {
     success: true,
     message: 'Order created successfully',
     statusCode: 201,
-    data: createdOrder,
+    data: {
+      ...orderData,
+      paymentUrl,
+    },
   });
 });
 

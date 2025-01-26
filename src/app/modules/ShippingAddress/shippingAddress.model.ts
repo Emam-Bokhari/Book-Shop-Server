@@ -28,6 +28,7 @@ const shippingAddressSchema = new Schema<TShippingAddress>(
     },
     postalCode: {
       type: String,
+      required: true,
       trim: true,
     },
     city: {
