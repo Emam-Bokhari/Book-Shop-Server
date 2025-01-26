@@ -63,6 +63,20 @@ const updateUserStatusController = asyncHandler(async (req, res) => {
   });
 });
 
+const updateUserRoleController = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const { role } = req.body;
+  const updatedRole = await UserServices.updateUserRoleById(id, role);
+
+  sendResponse(res, {
+    success: true,
+    message: "User role update successfully",
+    statusCode: 200,
+    data: updatedRole,
+  })
+
+})
+
 const deleteUserController = asyncHandler(async (req, res) => {
   const id = req.params.id;
   await UserServices.deleteUserById(id);
@@ -81,5 +95,6 @@ export const UserControllers = {
   getUserController,
   updateUserController,
   updateUserStatusController,
+  updateUserRoleController,
   deleteUserController,
 };
