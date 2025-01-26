@@ -9,7 +9,6 @@ const loginUser = async (payload: TLoginUser) => {
     if (!user) {
         throw new HttpError(404, "User not found")
     }
-    console.log(user)
 
     // check if user is already deleted
     if (user.isDeleted) {
