@@ -62,6 +62,27 @@ const updateUserStatusById = async (id: string, status: string) => {
   return updatedStatus;
 };
 
+const updateUserRoleById = async (id: string, role: string) => {
+  const validRoles = ["user", "admin"];
+
+  if (!validRoles.includes(role)) {
+    throw new HttpError(400, `Invalid roles: ${role}`)
+  };
+
+  const updatedRole = await User.findOneAndUpdate(
+    { _id: id, isDeleted: false },
+    { role: role },
+    { new: true, runValidators: true }
+  )
+
+  if (!updatedRole) {
+    throw new HttpError(404, "No user found with ID")
+  }
+
+  return updatedRole;
+
+}
+
 const deleteUserById = async (id: string) => {
   const deletedUser = await User.findOneAndUpdate(
     { _id: id },
@@ -82,5 +103,6 @@ export const UserServices = {
   getUserById,
   updateUserById,
   updateUserStatusById,
+  updateUserRoleById,
   deleteUserById,
 };

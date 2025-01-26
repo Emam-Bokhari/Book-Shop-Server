@@ -19,6 +19,8 @@ router.patch('/:id', UserControllers.updateUserController);
 
 router.patch('/:id/status', UserControllers.updateUserStatusController);
 
+router.patch("/:id/role", UserControllers.updateUserRoleController)
+
 router.delete('/:id', UserControllers.deleteUserController);
 
 export const UserRoutes = router;

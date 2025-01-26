@@ -18,4 +18,7 @@ exports.default = {
     fail_url: process.env.NODE_ENV === 'production'
         ? process.env.PRODUCTION_SUCCESS_URL
         : process.env.FAIL_URL,
+    cancel_url: process.env.NODE_ENV === 'production'
+        ? process.env.PRODUCTION_CANCEL_URL
+        : process.env.CANCEL_URL,
 };

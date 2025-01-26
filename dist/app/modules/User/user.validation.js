@@ -8,8 +8,7 @@ const createUserValidationSchema = zod_1.z.object({
         email: zod_1.z.string().trim().email(),
         password: zod_1.z
             .string()
-            .trim()
-            .max(12, 'Password can not exceed 12 characters'),
+            .trim(),
         role: zod_1.z.enum(['user', 'admin']).default('user'),
         status: zod_1.z.enum(['active', 'banned']).default('active'),
         isDeleted: zod_1.z.boolean().default(false),
@@ -26,7 +25,6 @@ const updateUserValidationSchema = zod_1.z.object({
         password: zod_1.z
             .string()
             .trim()
-            .max(12, 'Password can not exceed 12 characters')
             .optional(),
         role: zod_1.z.enum(['user', 'admin']).default('user'),
         status: zod_1.z.enum(['active', 'banned']).default('active'),
