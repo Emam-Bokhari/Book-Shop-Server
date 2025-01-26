@@ -8,8 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderServices = void 0;
+const config_1 = __importDefault(require("../../config"));
 const HttpError_1 = require("../../errors/HttpError");
 const product_model_1 = require("../Product/product.model");
 const shippingAddress_model_1 = require("../ShippingAddress/shippingAddress.model");
@@ -26,6 +30,9 @@ const createOrder = (payload) => __awaiter(void 0, void 0, void 0, function* () 
     // check if product is available
     if (product.quantity <= 0) {
         throw new HttpError_1.HttpError(400, 'Product is currently unavailable. Please check back later or choose another product.');
+    }
+    if (payload.quantity > product.quantity) {
+        throw new HttpError_1.HttpError(400, `Only ${product.quantity} units of this product are available. Please update your order quantity`);
     }
     // total amount of product
     const totalAmount = product.price * payload.quantity;
@@ -64,9 +71,9 @@ const createOrder = (payload) => __awaiter(void 0, void 0, void 0, function* () 
                 total_amount: totalAmount,
                 currency: 'BDT',
                 tran_id: transactionId,
-                success_url: 'https://yourdomain.com/api/payment/success',
-                fail_url: 'https://yourdomain.com/api/payment/fail',
-                cancel_url: 'https://yourdomain.com/api/payment/cancel',
+                success_url: config_1.default.success_url || "",
+                fail_url: config_1.default.fail_url || "",
+                cancel_url: config_1.default.cancel_url || "",
                 shipping_method: 'Courier',
                 product_name: product.title || '',
                 product_category: product.category || '',
@@ -85,9 +92,8 @@ const createOrder = (payload) => __awaiter(void 0, void 0, void 0, function* () 
                 ship_country: (finalShippingAddress === null || finalShippingAddress === void 0 ? void 0 : finalShippingAddress.country) || '',
             });
             payload.transactionId = transactionId;
-            const createdOrder = yield order_model_1.Order.create(Object.assign(Object.assign({}, payload), { shippingAddressDetails: finalShippingAddress, transactionId }));
-            createdOrder.paymentStatus = 'completed';
-            yield createdOrder.save();
+            const createdOrder = yield order_model_1.Order.create(Object.assign(Object.assign({}, payload), { shippingAddressDetails: finalShippingAddress }));
+            // decrease product quantity after creating the order
             yield product_model_1.Product.findOneAndUpdate({ _id: payload.product }, { $inc: { quantity: -payload.quantity } });
             return {
                 createdOrder,

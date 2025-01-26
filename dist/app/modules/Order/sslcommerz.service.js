@@ -22,7 +22,7 @@ const is_live = false; // true for live false for sandbox
 const initiatePayment = (paymentData) => __awaiter(void 0, void 0, void 0, function* () {
     const sslcz = new sslcommerz_lts_1.default(store_id, store_pass, is_live);
     try {
-        const apiResponse = yield sslcz.init(Object.assign(Object.assign({}, paymentData), { success_url: config_1.default.success_url, fail_url: config_1.default.fail_url }));
+        const apiResponse = yield sslcz.init(Object.assign(Object.assign({}, paymentData), { success_url: config_1.default.success_url, fail_url: config_1.default.fail_url, cancel_url: config_1.default.cancel_url }));
         return apiResponse.GatewayPageURL;
     }
     catch (error) {
