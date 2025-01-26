@@ -1,9 +1,11 @@
 import { model, Schema } from 'mongoose';
 import { TUser } from './user.interface';
+import bcrypt from "bcrypt"
 import {
   excludeDeletedAggregation,
   excludeDeletedQuery,
 } from '../../utils/moduleSpecific/queryFilters';
+import config from '../../config';
 
 const userSchema = new Schema<TUser>(
   {
@@ -49,6 +51,18 @@ const userSchema = new Schema<TUser>(
     versionKey: false,
   },
 );
+
+// hashed password by bcrypt
+userSchema.pre("save", async function (next) {
+  this.password = await bcrypt.hash(this.password, Number(config.bcrypt_salt_rounds));
+  next();
+})
+
+// password field is empty
+userSchema.post("save", function (doc, next) {
+  doc.password = "";
+  next()
+})
 
 // query middleware for soft delete by utils
 userSchema.pre('find', excludeDeletedQuery);
