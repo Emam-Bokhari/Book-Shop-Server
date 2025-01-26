@@ -1,3 +1,4 @@
+import config from '../../config';
 import { HttpError } from '../../errors/HttpError';
 import { Product } from '../Product/product.model';
 import { ShippingAddress } from '../ShippingAddress/shippingAddress.model';
@@ -27,6 +28,10 @@ const createOrder = async (payload: TOrder): Promise<TOrderResponse> => {
       400,
       'Product is currently unavailable. Please check back later or choose another product.',
     );
+  }
+
+  if (payload.quantity > product.quantity) {
+    throw new HttpError(400, `Only ${product.quantity} units of this product are available. Please update your order quantity`)
   }
 
   // total amount of product
@@ -72,9 +77,9 @@ const createOrder = async (payload: TOrder): Promise<TOrderResponse> => {
         total_amount: totalAmount,
         currency: 'BDT',
         tran_id: transactionId,
-        success_url: 'https://yourdomain.com/api/payment/success',
-        fail_url: 'https://yourdomain.com/api/payment/fail',
-        cancel_url: 'https://yourdomain.com/api/payment/cancel',
+        success_url: config.success_url as string || "",
+        fail_url: config.fail_url as string || "",
+        cancel_url: config.cancel_url as string || "",
         shipping_method: 'Courier',
         product_name: product.title || '',
         product_category: product.category || '',
