@@ -6,5 +6,3 @@ export const generateTransactionId = () => {
   const randomId = crypto.randomBytes(4).toString('hex');
   return `${prefix}-${timestamp}-${randomId}`;
 };
-
-

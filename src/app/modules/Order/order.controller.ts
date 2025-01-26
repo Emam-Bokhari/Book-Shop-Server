@@ -25,6 +25,8 @@ const createOrderController = asyncHandler(async (req, res) => {
 const getAllOrdersController = asyncHandler(async (req, res) => {
   const orders = await OrderServices.getAllOrders();
 
+  console.log(req.user);
+
   sendResponse(res, {
     success: true,
     message: 'Orders retrieved successfully',
