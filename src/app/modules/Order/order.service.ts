@@ -3,6 +3,9 @@ import { Product } from '../Product/product.model';
 import { ShippingAddress } from '../ShippingAddress/shippingAddress.model';
 import { TOrder, TShippingAddressDetails } from './order.interface';
 import { Order } from './order.model';
+import { generateTransactionId } from './order.utils';
+import { SSLCommerzService } from './sslcommerz.service';
+
 
 const createOrder = async (payload: TOrder) => {
   // TODO: check if user is exists
@@ -25,6 +28,11 @@ const createOrder = async (payload: TOrder) => {
       'Product is currently unavailable. Please check back later or choose another product.',
     );
   }
+
+  // total amount of product
+  const totalAmount = product.price * payload.quantity;
+
+  // console.log(totalAmount)
 
   // handle shipping address
   let finalShippingAddress: TShippingAddressDetails | null = null;
@@ -55,13 +63,58 @@ const createOrder = async (payload: TOrder) => {
     finalShippingAddress = payload.shippingAddressDetails;
   }
 
+  // payment method integration
+  // if payment method is sslCommerz, initiate the payment
+  if (payload.paymentMethod === "sslCommerz") {
+
+    const transactionId = generateTransactionId();
+    // console.log(transactionId)
+
+    try {
+      const paymentResponse = await SSLCommerzService.initiatePayment({
+        total_amount: totalAmount,
+        currency: 'BDT',
+        tran_id: transactionId,
+        success_url: 'https://yourdomain.com/api/payment/success',
+        fail_url: 'https://yourdomain.com/api/payment/fail',
+        cancel_url: 'https://yourdomain.com/api/payment/cancel',
+        shipping_method: 'Courier',
+        product_name: product.title,
+        product_category: product.category,
+        product_profile: 'general',
+        cus_name: 'Customer Name',
+        cus_email: 'customer@example.com',
+        cus_add1: finalShippingAddress?.address,
+        cus_city: finalShippingAddress?.city,
+        cus_postcode: finalShippingAddress?.postalCode,
+        cus_country: finalShippingAddress?.country,
+        cus_phone: finalShippingAddress?.phone,
+        ship_name: 'Customer Name',
+        ship_add1: 'Dhaka',
+        ship_city: 'Dhaka',
+        ship_postcode: 1000,
+        ship_country: 'Bangladesh',
+      });
+
+      payload.transactionId = transactionId
+
+      return paymentResponse.GatewayPageURL;
+
+    } catch (error) {
+      throw new HttpError(500, 'Failed to initiate payment.');
+
+    }
+
+  }
+
+
   // create the order
   const createdOrder = await Order.create({
     ...payload,
     shippingAddressDetails: finalShippingAddress,
   });
 
-  return createdOrder;
+  return null;
 };
 
 const getAllOrders = async () => {

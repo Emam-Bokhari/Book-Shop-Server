@@ -19,6 +19,7 @@ const shippingAddressDetailsSchema = new Schema<TShippingAddressDetails>({
   },
   postalCode: {
     type: String,
+    required: true,
     trim: true,
   },
   city: {
@@ -48,7 +49,6 @@ const orderSchema = new Schema<TOrder>(
     },
     totalAmount: {
       type: Number,
-      required: true,
     },
     paymentMethod: {
       type: String,
@@ -76,7 +76,7 @@ const orderSchema = new Schema<TOrder>(
     status: {
       type: String,
       enum: {
-        values: ['pending', 'shipping', 'delivered', 'cancelled'],
+        values: ['pending', 'shipping', 'delivered'],
         message: '{VALUE} is not a valid status',
       },
       default: 'pending',
@@ -85,6 +85,9 @@ const orderSchema = new Schema<TOrder>(
       type: Date,
       default: Date.now,
     },
+    transactionId: {
+      type: String,
+    }
   },
   {
     timestamps: true,
