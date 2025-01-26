@@ -70,12 +70,11 @@ const updateUserRoleController = asyncHandler(async (req, res) => {
 
   sendResponse(res, {
     success: true,
-    message: "User role update successfully",
+    message: 'User role update successfully',
     statusCode: 200,
     data: updatedRole,
-  })
-
-})
+  });
+});
 
 const deleteUserController = asyncHandler(async (req, res) => {
   const id = req.params.id;

@@ -22,4 +22,5 @@ export default {
     process.env.NODE_ENV === 'production'
       ? process.env.PRODUCTION_CANCEL_URL
       : process.env.CANCEL_URL,
+  jwt_access_secret: process.env.JWT_ACCESS_SECRET,
 };

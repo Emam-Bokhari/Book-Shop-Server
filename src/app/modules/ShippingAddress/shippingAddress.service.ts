@@ -4,16 +4,21 @@ import { TShippingAddress } from './shippingAddress.interface';
 import { ShippingAddress } from './shippingAddress.model';
 
 const createShippingAddress = async (payload: TShippingAddress) => {
-  const user = await User.findOne({ _id: payload.userId }).select("_id").lean();
+  const user = await User.findOne({ _id: payload.userId }).select('_id').lean();
 
   if (!user) {
-    throw new HttpError(404, "User not found. Please provide a valid user ID.");
+    throw new HttpError(404, 'User not found. Please provide a valid user ID.');
   }
 
-  const existingShippingAddress = await ShippingAddress.findOne({ userId: user })
+  const existingShippingAddress = await ShippingAddress.findOne({
+    userId: user,
+  });
 
   if (existingShippingAddress) {
-    throw new HttpError(409, "A default shipping address already exists for this user.")
+    throw new HttpError(
+      409,
+      'A default shipping address already exists for this user.',
+    );
   }
 
   const createdShippingAddress = await ShippingAddress.create(payload);

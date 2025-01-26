@@ -31,7 +31,10 @@ const createOrder = async (payload: TOrder): Promise<TOrderResponse> => {
   }
 
   if (payload.quantity > product.quantity) {
-    throw new HttpError(400, `Only ${product.quantity} units of this product are available. Please update your order quantity`)
+    throw new HttpError(
+      400,
+      `Only ${product.quantity} units of this product are available. Please update your order quantity`,
+    );
   }
 
   // total amount of product
@@ -77,9 +80,9 @@ const createOrder = async (payload: TOrder): Promise<TOrderResponse> => {
         total_amount: totalAmount,
         currency: 'BDT',
         tran_id: transactionId,
-        success_url: config.success_url as string || "",
-        fail_url: config.fail_url as string || "",
-        cancel_url: config.cancel_url as string || "",
+        success_url: (config.success_url as string) || '',
+        fail_url: (config.fail_url as string) || '',
+        cancel_url: (config.cancel_url as string) || '',
         shipping_method: 'Courier',
         product_name: product.title || '',
         product_category: product.category || '',
@@ -105,7 +108,6 @@ const createOrder = async (payload: TOrder): Promise<TOrderResponse> => {
         shippingAddressDetails: finalShippingAddress,
         // transactionId,
       });
-
 
       // decrease product quantity after creating the order
       await Product.findOneAndUpdate(
@@ -176,8 +178,6 @@ const updateOrderStatusById = async (id: string, status: string) => {
 
   return updatedStatus;
 };
-
-
 
 export const OrderServices = {
   createOrder,
