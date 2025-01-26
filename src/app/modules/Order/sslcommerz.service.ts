@@ -1,13 +1,13 @@
 import config from "../../config"
 import SSLCommerzPayment from 'sslcommerz-lts';
 import { HttpError } from "../../errors/HttpError";
-import axios from "axios";
+import { TPaymentResponse } from "./order.interface";
 
 const store_id = config.store_id;
 const store_pass = config.store_pass;
 const is_live = false; // true for live false for sandbox
 
-const initiatePayment = async (paymentData) => {
+const initiatePayment = async (paymentData: TPaymentResponse) => {
     const sslcz = new SSLCommerzPayment(store_id, store_pass, is_live);
 
     try {

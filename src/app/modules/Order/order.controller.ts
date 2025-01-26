@@ -13,7 +13,7 @@ const createOrderController = asyncHandler(async (req, res) => {
 
   sendResponse(res, {
     success: true,
-    message: 'Order created successfully. Please complete the payment.',
+    message: 'Order created successfully',
     statusCode: 201,
     data: {
       ...orderData,
