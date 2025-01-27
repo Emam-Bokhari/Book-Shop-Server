@@ -169,6 +169,11 @@ const getUserOrdersHistory = async (userEmail: string) => {
     throw new HttpError(404, "User not found")
   }
 
+  // check if user is banned
+  if (user.status === "banned") {
+    throw new HttpError(403, "Your account has been banned, and access is restricted.")
+  }
+
   const userOrders = await Order.find({ userId: user._id }).populate("userId");
 
   if (!userOrders || userOrders.length === 0) {
