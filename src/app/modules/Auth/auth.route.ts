@@ -6,7 +6,7 @@ import { validateRequestSchema } from '../../middlewares/validateRequestSchema';
 const router = express.Router();
 
 router.post(
-    '/',
+    '/register',
     validateRequestSchema(AuthValidationSchema.registerUserValidationSchema),
     AuthControllers.registerUserController,
 );

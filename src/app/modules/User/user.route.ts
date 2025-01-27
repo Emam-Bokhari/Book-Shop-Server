@@ -4,7 +4,6 @@ import { UserControllers } from './user.controller';
 const router = express.Router();
 
 
-
 router.get('/', UserControllers.getAllUsersController);
 
 router.get('/:id', UserControllers.getUserController);
