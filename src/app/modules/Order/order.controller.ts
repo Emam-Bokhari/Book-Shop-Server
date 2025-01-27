@@ -24,7 +24,8 @@ const createOrderController = asyncHandler(async (req, res) => {
 });
 
 const getAllOrdersController = asyncHandler(async (req, res) => {
-  const orders = await OrderServices.getAllOrders();
+  const query = req.query;
+  const orders = await OrderServices.getAllOrders(query);
 
   sendResponse(res, {
     success: true,

@@ -17,8 +17,9 @@ const createShippingAddressController = asyncHandler(async (req, res) => {
 });
 
 const getAllShippingAddressController = asyncHandler(async (req, res) => {
+  const query = req.query;
   const shippingAddresses =
-    await ShippingAddressServices.getAllShippingAddress();
+    await ShippingAddressServices.getAllShippingAddress(query);
 
   sendResponse(res, {
     success: true,

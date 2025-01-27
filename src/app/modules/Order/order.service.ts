@@ -1,3 +1,4 @@
+import QueryBuilder from '../../builder/QueryBuilder';
 import config from '../../config';
 import { HttpError } from '../../errors/HttpError';
 import { Product } from '../Product/product.model';
@@ -103,14 +104,14 @@ const createOrder = async (payload: TOrder, userEmail: string): Promise<TOrderRe
         product_name: product.title || '',
         product_category: product.category || '',
         product_profile: 'general',
-        cus_name: 'Customer Name',
-        cus_email: 'customer@example.com',
+        cus_name: user.name || "Unknown",
+        cus_email: user.email || 'customer@example.com',
         cus_add1: finalShippingAddress?.address || '',
         cus_city: finalShippingAddress?.city || '',
         cus_postcode: finalShippingAddress?.postalCode || '',
         cus_country: finalShippingAddress?.country || '',
         cus_phone: finalShippingAddress?.phone || '',
-        ship_name: 'Customer Name',
+        ship_name: user.name || "Unknown",
         ship_add1: finalShippingAddress?.address || '',
         ship_city: finalShippingAddress?.city || '',
         ship_postcode: finalShippingAddress?.postalCode || '',
@@ -155,8 +156,10 @@ const createOrder = async (payload: TOrder, userEmail: string): Promise<TOrderRe
   return { createdOrder, paymentUrl: '' };
 };
 
-const getAllOrders = async () => {
-  const orders = await Order.find().populate("userId");
+const getAllOrders = async (query: Record<string, unknown>) => {
+  const orderQuery = new QueryBuilder(Order.find().populate("userId"), query).filter().sortBy().paginate()
+
+  const orders = await orderQuery.modelQuery;
 
   if (orders.length === 0) {
     throw new HttpError(404, 'No order were found in the database');

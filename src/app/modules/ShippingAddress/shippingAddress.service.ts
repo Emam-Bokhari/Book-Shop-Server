@@ -1,3 +1,4 @@
+import QueryBuilder from '../../builder/QueryBuilder';
 import { HttpError } from '../../errors/HttpError';
 import { User } from '../User/user.model';
 import { TShippingAddress } from './shippingAddress.interface';
@@ -31,8 +32,11 @@ const createShippingAddress = async (payload: TShippingAddress, userEmail: strin
   return createdShippingAddress;
 };
 
-const getAllShippingAddress = async () => {
-  const shippingAddresses = await ShippingAddress.find().populate("userId");
+const getAllShippingAddress = async (query: Record<string, unknown>) => {
+
+  const shippingAddressQuery = new QueryBuilder(ShippingAddress.find().populate("userId"), query).filter().sortBy().paginate()
+
+  const shippingAddresses = await shippingAddressQuery.modelQuery;
 
   if (shippingAddresses.length === 0) {
     throw new HttpError(404, 'No shipping address were found in the database');
