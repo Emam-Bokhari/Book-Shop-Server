@@ -21,16 +21,32 @@ const getUserById = async (id: string) => {
   return user;
 };
 
-const updateUserById = async (id: string, payload: string) => {
+const updateUserById = async (id: string, name: string, userEmail: string) => {
+
+  const user = await User.findOne({ _id: id, isDeleted: false })
+
+  // check if user is exists
+  if (!user) {
+    throw new HttpError(404, 'No user found with ID');
+  }
+
+  // check if user is banned
+  if (user.status === "banned") {
+    throw new HttpError(403, "Your account is banned. You cannot perform this action.")
+  }
+
+
+  // check if the email of the logged-in user matches the user
+  if (user.email !== userEmail) {
+    throw new HttpError(403, "You are not allowed to update this user")
+  }
+
   const updatedUser = await User.findOneAndUpdate(
     { _id: id, isDeleted: false },
-    { name: payload },
+    { name: name },
     { new: true, runValidators: true },
   );
 
-  if (!updatedUser) {
-    throw new HttpError(404, 'No user found with ID');
-  }
 
   return updatedUser;
 };
@@ -62,29 +78,48 @@ const updateUserRoleById = async (id: string, role: string) => {
     throw new HttpError(400, `Invalid roles: ${role}`);
   }
 
+  const user = await User.findOne({ _id: id, isDeleted: false })
+
+  // check if user is exists
+  if (!user) {
+    throw new HttpError(404, 'No user found with ID');
+  }
+
+  // check if user is banned
+  if (user.status === "banned") {
+    throw new HttpError(403, "The user is banned, You cannot update their role.")
+  }
+
   const updatedRole = await User.findOneAndUpdate(
     { _id: id, isDeleted: false },
     { role: role },
     { new: true, runValidators: true },
   );
 
-  if (!updatedRole) {
-    throw new HttpError(404, 'No user found with ID');
-  }
+
 
   return updatedRole;
 };
 
 const deleteUserById = async (id: string) => {
+  const user = await User.findOne({ _id: id, isDeleted: false })
+
+  // check if user is exists
+  if (!user) {
+    throw new HttpError(404, 'No user found with ID');
+  }
+
+  // check if user is banned
+  if (user.status === "banned") {
+    throw new HttpError(403, "Your account is banned. You cannot perform this action.")
+  }
+
   const deletedUser = await User.findOneAndUpdate(
     { _id: id },
     { isDeleted: true },
     { new: true },
   );
 
-  if (!deletedUser) {
-    throw new HttpError(404, 'No user found with ID');
-  }
 
   return deletedUser;
 };

@@ -29,8 +29,9 @@ const getUserController = asyncHandler(async (req, res) => {
 
 const updateUserController = asyncHandler(async (req, res) => {
   const id = req.params.id;
+  const userEmail = req.user.email;
   const { name } = req.body;
-  const updatedUser = await UserServices.updateUserById(id, name);
+  const updatedUser = await UserServices.updateUserById(id, name, userEmail);
 
   sendResponse(res, {
     success: true,
