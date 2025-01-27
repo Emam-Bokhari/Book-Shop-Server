@@ -90,7 +90,6 @@ const deleteUserById = async (id: string) => {
 };
 
 export const UserServices = {
-  createUser,
   getAllUsers,
   getUserById,
   updateUserById,

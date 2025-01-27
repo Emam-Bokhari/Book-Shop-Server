@@ -2,17 +2,7 @@ import { UserServices } from './user.service';
 import { asyncHandler } from '../../utils/global/asyncHandler';
 import { sendResponse } from '../../utils/global/sendResponse';
 
-const createUserController = asyncHandler(async (req, res) => {
-  const userPayload = req.body;
-  const createdUser = await UserServices.createUser(userPayload);
 
-  sendResponse(res, {
-    success: true,
-    message: 'User created successfully',
-    statusCode: 201,
-    data: createdUser,
-  });
-});
 
 const getAllUsersController = asyncHandler(async (req, res) => {
   const users = await UserServices.getAllUsers();
@@ -89,7 +79,6 @@ const deleteUserController = asyncHandler(async (req, res) => {
 });
 
 export const UserControllers = {
-  createUserController,
   getAllUsersController,
   getUserController,
   updateUserController,
