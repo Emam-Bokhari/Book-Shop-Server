@@ -1,0 +1,941 @@
+{
+	"info": {
+		"_postman_id": "40197e60-2fb0-449d-aa1c-5aa69bf14092",
+		"name": "Book Shop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30934861"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "User login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"akib@gmail.com\",\r\n    \"password\":\"akib123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auths/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auths",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"moshfiq@gmail.com\",\r\n    \"password\":\"bokhari123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auths/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auths",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register a user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Imtiaz Hossain Akib\",\r\n    \"email\":\"akib@gmail.com\",\r\n    \"password\":\"akib123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auths/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auths",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Management",
+			"item": [
+				{
+					"name": "Get all users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vc2hmaXFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzM3OTU0MDI0LCJleHAiOjE3Mzg1NTg4MjR9.5wfeki5zwwspelo5vjDegctFIWrZd86GA5LpR-dGXHo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/6793c49b5620e1991989d8d9",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"6793c49b5620e1991989d8d9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFraWJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3Mzc5NTA5OTEsImV4cCI6MTczODU1NTc5MX0.z1cQ0jxSTtfJ9N2raLoVaMZeW4WX2V0vtMwfN6bpDG8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Akib\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/6796ffb3a2988affe5b15911",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"6796ffb3a2988affe5b15911"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vc2hmaXFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzM3OTU0MDI0LCJleHAiOjE3Mzg1NTg4MjR9.5wfeki5zwwspelo5vjDegctFIWrZd86GA5LpR-dGXHo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\":\"active\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/6796ffb3a2988affe5b15911/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"6796ffb3a2988affe5b15911",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a user role",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vc2hmaXFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzM3OTU0MDI0LCJleHAiOjE3Mzg1NTg4MjR9.5wfeki5zwwspelo5vjDegctFIWrZd86GA5LpR-dGXHo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"role\":\"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/6796ffb3a2988affe5b15911/role",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"6796ffb3a2988affe5b15911",
+								"role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vc2hmaXFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzM3OTU0MDI0LCJleHAiOjE3Mzg1NTg4MjR9.5wfeki5zwwspelo5vjDegctFIWrZd86GA5LpR-dGXHo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/6796ffb3a2988affe5b15911",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"6796ffb3a2988affe5b15911"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product Management",
+			"item": [
+				{
+					"name": "Create a product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vc2hmaXFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzM3OTU0MDI0LCJleHAiOjE3Mzg1NTg4MjR9.5wfeki5zwwspelo5vjDegctFIWrZd86GA5LpR-dGXHo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Bilogy\",\r\n  \"category\": \"academic\",\r\n  \"author\": \"Bokhari\",\r\n  \"description\": \"A novel set in the Jazz Age, exploring themes of decadence and excess.\",\r\n  \"price\": 700,\r\n  \"image\": \"https://example.com/images/the-great-gatsby.jpg\",\r\n  \"publisher\": \"Scribner\",\r\n  \"publishedDate\": \"1925-04-10\",\r\n  \"edition\": \"First Edition\",\r\n  \"language\": \"bengali\",\r\n  \"pages\": 218,\r\n  \"rating\": 4,\r\n  \"format\": \"hardcover\",\r\n  \"quantity\": 100\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "academic",
+									"disabled": true
+								},
+								{
+									"key": "sortBy",
+									"value": "asc",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "minPrice",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "maxPrice",
+									"value": "2000",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/679478460d13e3699a50983e",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"679478460d13e3699a50983e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vc2hmaXFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzM3OTU0MDI0LCJleHAiOjE3Mzg1NTg4MjR9.5wfeki5zwwspelo5vjDegctFIWrZd86GA5LpR-dGXHo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"price\":700,\r\n    \"quantity\":100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products/679478460d13e3699a50983e",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"679478460d13e3699a50983e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vc2hmaXFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzM3OTU0MDI0LCJleHAiOjE3Mzg1NTg4MjR9.5wfeki5zwwspelo5vjDegctFIWrZd86GA5LpR-dGXHo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/679478460d13e3699a50983e",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"679478460d13e3699a50983e"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Shipping Address Management",
+			"item": [
+				{
+					"name": "Create a shipping address",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vc2hmaXFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzM3OTYwMTcxLCJleHAiOjE3Mzg1NjQ5NzF9.EFCH2zLXNZEblmT1amYVMsuGY8M2-4lmV4Z-YqITC2o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"office\",\r\n    \"phone\": \"123456789\",\r\n    \"address\": \"789 Office Lane\",\r\n    \"postalCode\": \"3600\",\r\n    \"city\": \"Brahmanbaria\",\r\n    \"country\": \"Bangladesh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/shipping-address",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"shipping-address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all shipping address",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vc2hmaXFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzM3OTYwMTcxLCJleHAiOjE3Mzg1NjQ5NzF9.EFCH2zLXNZEblmT1amYVMsuGY8M2-4lmV4Z-YqITC2o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/shipping-address",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"shipping-address"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "office",
+									"disabled": true
+								},
+								{
+									"key": "sortBy",
+									"value": "createdAt",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a shopping address",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vc2hmaXFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzM3OTYwMTcxLCJleHAiOjE3Mzg1NjQ5NzF9.EFCH2zLXNZEblmT1amYVMsuGY8M2-4lmV4Z-YqITC2o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/shipping-address/67963e4df0db02bdad99a26a",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"shipping-address",
+								"67963e4df0db02bdad99a26a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a shopping address",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vc2hmaXFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzM3OTYwMTcxLCJleHAiOjE3Mzg1NjQ5NzF9.EFCH2zLXNZEblmT1amYVMsuGY8M2-4lmV4Z-YqITC2o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"country\": \"Qasba\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/shipping-address/67963e4df0db02bdad99a26a",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"shipping-address",
+								"67963e4df0db02bdad99a26a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a shopping address",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vc2hmaXFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzM3OTYwMTcxLCJleHAiOjE3Mzg1NjQ5NzF9.EFCH2zLXNZEblmT1amYVMsuGY8M2-4lmV4Z-YqITC2o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/shipping-address/67963e4df0db02bdad99a26a",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"shipping-address",
+								"67963e4df0db02bdad99a26a"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order Management",
+			"item": [
+				{
+					"name": "Create a order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFraWJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3Mzc5NjM1NDUsImV4cCI6MTczODU2ODM0NX0.51IKHrK_uT0LuFFU8QF7NfD9vDi1PQOX21zwI-HLmjI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"product\": \"679478460d13e3699a50983e\",\r\n    \"quantity\": 7,\r\n    \"paymentMethod\": \"sslCommerz\",\r\n    // \"shippingAddress\":\"6795e5712a69a76e950bb3c9\"\r\n    \"shippingAddressDetails\": {\r\n        \"name\": \"home\",\r\n        \"phone\": \"1234567890\",\r\n        \"address\": \"123 Main Street\",\r\n        \"postalCode\": \"12345\",\r\n        \"city\": \"Dhaka\",\r\n        \"country\": \"Bangladesh\"\r\n    }\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all orders",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vc2hmaXFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzM3OTU0MDI0LCJleHAiOjE3Mzg1NTg4MjR9.5wfeki5zwwspelo5vjDegctFIWrZd86GA5LpR-dGXHo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqd3RQYXlsb2FkIjp7ImVtYWlsIjoibW9zaGZpcUBnbWFpbC5jb20iLCJyb2xlIjoidXNlciJ9LCJpYXQiOjE3Mzc5MTA3NTQsImV4cCI6MTczODUxNTU1NH0.Esmid9GiBFT4SGPtpKqpxLiiOhR6mfkZ5qZeL5mnJrs",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders"
+							],
+							"query": [
+								{
+									"key": "paymentMethod",
+									"value": "sslCommerz",
+									"disabled": true
+								},
+								{
+									"key": "sortBy",
+									"value": "paymentMethod",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vc2hmaXFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzM3OTYwMTcxLCJleHAiOjE3Mzg1NjQ5NzF9.EFCH2zLXNZEblmT1amYVMsuGY8M2-4lmV4Z-YqITC2o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/orders/67972bc13f9ef94cd195a1bd",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders",
+								"67972bc13f9ef94cd195a1bd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vc2hmaXFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzM3OTYwMTcxLCJleHAiOjE3Mzg1NjQ5NzF9.EFCH2zLXNZEblmT1amYVMsuGY8M2-4lmV4Z-YqITC2o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"status\": \"shipping\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/orders/67972bc13f9ef94cd195a1bd/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders",
+								"67972bc13f9ef94cd195a1bd",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user order history",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vc2hmaXFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzM3OTYwMTcxLCJleHAiOjE3Mzg1NjQ5NzF9.EFCH2zLXNZEblmT1amYVMsuGY8M2-4lmV4Z-YqITC2o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/orders/order-history",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders",
+								"order-history"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment Testing",
+			"item": [
+				{
+					"name": "Test SSL Commerez",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "store_id",
+									"value": "dream67950c298b8c2",
+									"type": "text"
+								},
+								{
+									"key": "store_passwd",
+									"value": "dream67950c298b8c2@ssl",
+									"type": "text"
+								},
+								{
+									"key": "total_amount",
+									"value": "555",
+									"type": "text"
+								},
+								{
+									"key": "currency",
+									"value": "BDT",
+									"type": "text"
+								},
+								{
+									"key": "tran_id",
+									"value": "r12344561515",
+									"type": "text"
+								},
+								{
+									"key": "cus_email",
+									"value": "bokhari@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "cus_add1",
+									"value": "brahmanbaria",
+									"type": "text"
+								},
+								{
+									"key": "cus_city",
+									"value": "Qasba",
+									"type": "text"
+								},
+								{
+									"key": "cus_country",
+									"value": "bd",
+									"type": "text"
+								},
+								{
+									"key": "cus_phone",
+									"value": "01315773424",
+									"type": "text"
+								},
+								{
+									"key": "shipping_method",
+									"value": "Courier",
+									"type": "text"
+								},
+								{
+									"key": "ship_name",
+									"value": "Customer Name",
+									"type": "text"
+								},
+								{
+									"key": "ship_add1",
+									"value": "Dhaka",
+									"type": "text"
+								},
+								{
+									"key": "ship_city",
+									"value": "Dhaka",
+									"type": "text"
+								},
+								{
+									"key": "ship_postcode",
+									"value": "1000",
+									"type": "text"
+								},
+								{
+									"key": "ship_country",
+									"value": "Bangladesh",
+									"type": "text"
+								},
+								{
+									"key": "product_name",
+									"value": "Computer",
+									"type": "text"
+								},
+								{
+									"key": "product_category",
+									"value": "Computer",
+									"type": "text"
+								},
+								{
+									"key": "product_profile",
+									"value": "general",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://sandbox.sslcommerz.com/gwprocess/v4/api.php",
+							"protocol": "https",
+							"host": [
+								"sandbox",
+								"sslcommerz",
+								"com"
+							],
+							"path": [
+								"gwprocess",
+								"v4",
+								"api.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
