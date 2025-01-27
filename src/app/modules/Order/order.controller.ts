@@ -25,8 +25,6 @@ const createOrderController = asyncHandler(async (req, res) => {
 const getAllOrdersController = asyncHandler(async (req, res) => {
   const orders = await OrderServices.getAllOrders();
 
-  console.log(req.user);
-
   sendResponse(res, {
     success: true,
     message: 'Orders retrieved successfully',
@@ -47,6 +45,18 @@ const getOrderController = asyncHandler(async (req, res) => {
   });
 });
 
+const getUserOrdersHistoryController = asyncHandler(async (req, res) => {
+  const userEmail = req.user.email;
+  const userOrders = await OrderServices.getUserOrdersHistory(userEmail);
+
+  sendResponse(res, {
+    success: true,
+    message: "User order history retrieved successfully",
+    statusCode: 200,
+    data: userOrders,
+  })
+})
+
 const updateOrderStatusController = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const { status } = req.body;
@@ -64,5 +74,6 @@ export const OrderControllers = {
   createOrderController,
   getAllOrdersController,
   getOrderController,
+  getUserOrdersHistoryController,
   updateOrderStatusController,
 };

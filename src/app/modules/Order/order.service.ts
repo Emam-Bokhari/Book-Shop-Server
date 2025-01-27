@@ -2,6 +2,7 @@ import config from '../../config';
 import { HttpError } from '../../errors/HttpError';
 import { Product } from '../Product/product.model';
 import { ShippingAddress } from '../ShippingAddress/shippingAddress.model';
+import { User } from '../User/user.model';
 import { TOrder, TShippingAddressDetails } from './order.interface';
 import { Order } from './order.model';
 import { generateTransactionId } from './order.utils';
@@ -140,7 +141,7 @@ const createOrder = async (payload: TOrder): Promise<TOrderResponse> => {
 };
 
 const getAllOrders = async () => {
-  const orders = await Order.find();
+  const orders = await Order.find().populate("userId");
 
   if (orders.length === 0) {
     throw new HttpError(404, 'No order were found in the database');
@@ -150,7 +151,7 @@ const getAllOrders = async () => {
 };
 
 const getOrderById = async (id: string) => {
-  const order = await Order.findById(id);
+  const order = await Order.findById(id).populate("userId");
 
   if (!order) {
     throw new HttpError(404, 'No order found with ID');
@@ -158,6 +159,24 @@ const getOrderById = async (id: string) => {
 
   return order;
 };
+
+const getUserOrdersHistory = async (userEmail: string) => {
+
+  const user = await User.isUserExists(userEmail);
+
+  // check if user is exits
+  if (!user) {
+    throw new HttpError(404, "User not found")
+  }
+
+  const userOrders = await Order.find({ userId: user._id }).populate("userId");
+
+  if (!userOrders || userOrders.length === 0) {
+    throw new HttpError(404, "No order were found this user")
+  }
+
+  return userOrders;
+}
 
 const updateOrderStatusById = async (id: string, status: string) => {
   const validStatuses = ['pending', 'shipping', 'delivered', 'cancelled'];
@@ -183,5 +202,6 @@ export const OrderServices = {
   createOrder,
   getAllOrders,
   getOrderById,
+  getUserOrdersHistory,
   updateOrderStatusById,
 };

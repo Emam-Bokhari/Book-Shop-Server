@@ -38,10 +38,12 @@ const orderSchema = new Schema<TOrder>(
   {
     userId: {
       type: Schema.Types.ObjectId,
+      ref: "User",
     },
     product: {
       type: Schema.Types.ObjectId,
       required: true,
+      ref: "Product",
     },
     quantity: {
       type: Number,

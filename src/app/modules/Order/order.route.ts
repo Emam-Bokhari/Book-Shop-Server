@@ -9,14 +9,17 @@ const router = express.Router();
 
 router.post(
   '/',
+  auth(USER_ROLE.user, USER_ROLE.admin),
   validateRequestSchema(OrderValidationSchema.createOrderValidationSchema),
   OrderControllers.createOrderController,
 );
 
-router.get('/', auth(USER_ROLE.user), OrderControllers.getAllOrdersController);
+router.get("/order-history", auth(USER_ROLE.user, USER_ROLE.admin), OrderControllers.getUserOrdersHistoryController)
 
-router.get('/:id', OrderControllers.getOrderController);
+router.get('/', auth(USER_ROLE.admin), OrderControllers.getAllOrdersController);
 
-router.patch('/:id/status', OrderControllers.updateOrderStatusController);
+router.get('/:id', auth(USER_ROLE.admin), OrderControllers.getOrderController);
+
+router.patch('/:id/status', auth(USER_ROLE.admin), OrderControllers.updateOrderStatusController);
 
 export const OrderRoutes = router;
