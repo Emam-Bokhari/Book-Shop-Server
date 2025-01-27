@@ -32,18 +32,33 @@ var __awaiter =
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   };
+var __importDefault =
+  (this && this.__importDefault) ||
+  function (mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  };
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.ProductServices = void 0;
+const QueryBuilder_1 = __importDefault(require('../../builder/QueryBuilder'));
 const HttpError_1 = require('../../errors/HttpError');
 const product_model_1 = require('./product.model');
+const product_utils_1 = require('./product.utils');
 const createProduct = (payload) =>
   __awaiter(void 0, void 0, void 0, function* () {
     const createdProduct = yield product_model_1.Product.create(payload);
     return createdProduct;
   });
-const getAllProducts = () =>
+const getAllProducts = (query) =>
   __awaiter(void 0, void 0, void 0, function* () {
-    const products = yield product_model_1.Product.find();
+    const productQuery = new QueryBuilder_1.default(
+      product_model_1.Product.find(),
+      query,
+    )
+      .search(product_utils_1.searchableFields)
+      .filter()
+      .sortBy()
+      .paginate();
+    const products = yield productQuery.modelQuery;
     if (products.length === 0) {
       throw new HttpError_1.HttpError(
         404,

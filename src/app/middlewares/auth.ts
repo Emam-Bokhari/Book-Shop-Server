@@ -38,7 +38,6 @@ export const auth = (...requiredRoles: TUserRole[]) => {
 
       const { email, role } = decoded;
 
-
       // check if the user is exists
       const user = await User.isUserExists(email);
       if (!user) {

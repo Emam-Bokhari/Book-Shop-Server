@@ -11,7 +11,6 @@ const registerUserValidationSchema = z.object({
   }),
 });
 
-
 const loginValidationSchema = z.object({
   body: z.object({
     email: z.string().email().trim(),

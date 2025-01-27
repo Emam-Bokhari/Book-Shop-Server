@@ -32,20 +32,50 @@ var __awaiter =
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   };
+var __importDefault =
+  (this && this.__importDefault) ||
+  function (mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  };
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.ShippingAddressServices = void 0;
+const QueryBuilder_1 = __importDefault(require('../../builder/QueryBuilder'));
 const HttpError_1 = require('../../errors/HttpError');
+const user_model_1 = require('../User/user.model');
 const shippingAddress_model_1 = require('./shippingAddress.model');
-const createShippingAddress = (payload) =>
+const createShippingAddress = (payload, userEmail) =>
   __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.User.isUserExists(userEmail);
+    // check if user is exists
+    if (!user) {
+      throw new HttpError_1.HttpError(404, 'User not found.');
+    }
+    payload.userId = user._id;
+    // check is default shipping address is exists
+    const existingShippingAddress =
+      yield shippingAddress_model_1.ShippingAddress.findOne({
+        userId: user,
+      });
+    if (existingShippingAddress) {
+      throw new HttpError_1.HttpError(
+        409,
+        'A default shipping address already exists for this user.',
+      );
+    }
     const createdShippingAddress =
       yield shippingAddress_model_1.ShippingAddress.create(payload);
     return createdShippingAddress;
   });
-const getAllShippingAddress = () =>
+const getAllShippingAddress = (query) =>
   __awaiter(void 0, void 0, void 0, function* () {
-    const shippingAddresses =
-      yield shippingAddress_model_1.ShippingAddress.find();
+    const shippingAddressQuery = new QueryBuilder_1.default(
+      shippingAddress_model_1.ShippingAddress.find().populate('userId'),
+      query,
+    )
+      .filter()
+      .sortBy()
+      .paginate();
+    const shippingAddresses = yield shippingAddressQuery.modelQuery;
     if (shippingAddresses.length === 0) {
       throw new HttpError_1.HttpError(
         404,
@@ -57,7 +87,9 @@ const getAllShippingAddress = () =>
 const getShippingAddressById = (id) =>
   __awaiter(void 0, void 0, void 0, function* () {
     const shippingAddress =
-      yield shippingAddress_model_1.ShippingAddress.findById(id);
+      yield shippingAddress_model_1.ShippingAddress.findById(id).populate(
+        'userId',
+      );
     if (!shippingAddress) {
       throw new HttpError_1.HttpError(404, 'No shipping address found with ID');
     }

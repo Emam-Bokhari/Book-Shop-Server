@@ -52,7 +52,9 @@ const createProductController = (0, asyncHandler_1.asyncHandler)((req, res) =>
 );
 const getAllProductsController = (0, asyncHandler_1.asyncHandler)((req, res) =>
   __awaiter(void 0, void 0, void 0, function* () {
-    const products = yield product_service_1.ProductServices.getAllProducts();
+    const query = req.query;
+    const products =
+      yield product_service_1.ProductServices.getAllProducts(query);
     (0, sendResponse_1.sendResponse)(res, {
       success: true,
       message: 'Products retrieved successfully',

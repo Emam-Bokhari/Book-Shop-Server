@@ -39,16 +39,31 @@ var __importDefault =
   };
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.OrderServices = void 0;
+const QueryBuilder_1 = __importDefault(require('../../builder/QueryBuilder'));
 const config_1 = __importDefault(require('../../config'));
 const HttpError_1 = require('../../errors/HttpError');
 const product_model_1 = require('../Product/product.model');
 const shippingAddress_model_1 = require('../ShippingAddress/shippingAddress.model');
+const user_model_1 = require('../User/user.model');
 const order_model_1 = require('./order.model');
 const order_utils_1 = require('./order.utils');
 const sslcommerz_service_1 = require('./sslcommerz.service');
-const createOrder = (payload) =>
+const createOrder = (payload, userEmail) =>
   __awaiter(void 0, void 0, void 0, function* () {
-    // TODO: check if user is exists
+    const user = yield user_model_1.User.isUserExists(userEmail);
+    // check if user is exists
+    if (!user) {
+      throw new HttpError_1.HttpError(404, 'User not found');
+    }
+    // check is user is banned
+    if (user.status === 'banned') {
+      throw new HttpError_1.HttpError(
+        403,
+        'Your account is banned. You cannot perform this action.',
+      );
+    }
+    // set user id
+    payload.userId = user._id;
     const product = yield product_model_1.Product.findOne({
       _id: payload.product,
     });
@@ -117,8 +132,8 @@ const createOrder = (payload) =>
             product_name: product.title || '',
             product_category: product.category || '',
             product_profile: 'general',
-            cus_name: 'Customer Name',
-            cus_email: 'customer@example.com',
+            cus_name: user.name || 'Unknown',
+            cus_email: user.email || 'customer@example.com',
             cus_add1:
               (finalShippingAddress === null || finalShippingAddress === void 0
                 ? void 0
@@ -139,7 +154,7 @@ const createOrder = (payload) =>
               (finalShippingAddress === null || finalShippingAddress === void 0
                 ? void 0
                 : finalShippingAddress.phone) || '',
-            ship_name: 'Customer Name',
+            ship_name: user.name || 'Unknown',
             ship_add1:
               (finalShippingAddress === null || finalShippingAddress === void 0
                 ? void 0
@@ -189,9 +204,16 @@ const createOrder = (payload) =>
     );
     return { createdOrder, paymentUrl: '' };
   });
-const getAllOrders = () =>
+const getAllOrders = (query) =>
   __awaiter(void 0, void 0, void 0, function* () {
-    const orders = yield order_model_1.Order.find();
+    const orderQuery = new QueryBuilder_1.default(
+      order_model_1.Order.find().populate('userId'),
+      query,
+    )
+      .filter()
+      .sortBy()
+      .paginate();
+    const orders = yield orderQuery.modelQuery;
     if (orders.length === 0) {
       throw new HttpError_1.HttpError(
         404,
@@ -202,11 +224,33 @@ const getAllOrders = () =>
   });
 const getOrderById = (id) =>
   __awaiter(void 0, void 0, void 0, function* () {
-    const order = yield order_model_1.Order.findById(id);
+    const order = yield order_model_1.Order.findById(id).populate('userId');
     if (!order) {
       throw new HttpError_1.HttpError(404, 'No order found with ID');
     }
     return order;
+  });
+const getUserOrdersHistory = (userEmail) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.User.isUserExists(userEmail);
+    // check if user is exits
+    if (!user) {
+      throw new HttpError_1.HttpError(404, 'User not found');
+    }
+    // check if user is banned
+    if (user.status === 'banned') {
+      throw new HttpError_1.HttpError(
+        403,
+        'Your account has been banned, and access is restricted.',
+      );
+    }
+    const userOrders = yield order_model_1.Order.find({
+      userId: user._id,
+    }).populate('userId');
+    if (!userOrders || userOrders.length === 0) {
+      throw new HttpError_1.HttpError(404, 'No order were found this user');
+    }
+    return userOrders;
   });
 const updateOrderStatusById = (id, status) =>
   __awaiter(void 0, void 0, void 0, function* () {
@@ -228,5 +272,6 @@ exports.OrderServices = {
   createOrder,
   getAllOrders,
   getOrderById,
+  getUserOrdersHistory,
   updateOrderStatusById,
 };

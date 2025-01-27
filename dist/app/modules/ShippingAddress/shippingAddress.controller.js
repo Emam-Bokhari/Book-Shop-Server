@@ -41,9 +41,11 @@ const createShippingAddressController = (0, asyncHandler_1.asyncHandler)(
   (req, res) =>
     __awaiter(void 0, void 0, void 0, function* () {
       const shippingAddressPayload = req.body;
+      const userEmail = req.user.email;
       const createdShippingAddress =
         yield shippingAddress_service_1.ShippingAddressServices.createShippingAddress(
           shippingAddressPayload,
+          userEmail,
         );
       (0, sendResponse_1.sendResponse)(res, {
         success: true,
@@ -56,8 +58,11 @@ const createShippingAddressController = (0, asyncHandler_1.asyncHandler)(
 const getAllShippingAddressController = (0, asyncHandler_1.asyncHandler)(
   (req, res) =>
     __awaiter(void 0, void 0, void 0, function* () {
+      const query = req.query;
       const shippingAddresses =
-        yield shippingAddress_service_1.ShippingAddressServices.getAllShippingAddress();
+        yield shippingAddress_service_1.ShippingAddressServices.getAllShippingAddress(
+          query,
+        );
       (0, sendResponse_1.sendResponse)(res, {
         success: true,
         message: 'Shipping addresses retrieved successfully',

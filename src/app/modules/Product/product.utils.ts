@@ -1,1 +1,8 @@
-export const searchableFields = ["title", "author", "category", "publisher", "language", "format"]
+export const searchableFields = [
+  'title',
+  'author',
+  'category',
+  'publisher',
+  'language',
+  'format',
+];

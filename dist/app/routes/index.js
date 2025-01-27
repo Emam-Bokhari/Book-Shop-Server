@@ -10,11 +10,16 @@ const user_route_1 = require('../modules/User/user.route');
 const product_route_1 = require('../modules/Product/product.route');
 const order_route_1 = require('../modules/Order/order.route');
 const shippingAddress_route_1 = require('../modules/ShippingAddress/shippingAddress.route');
+const auth_route_1 = require('../modules/Auth/auth.route');
 const router = express_1.default.Router();
 const moduleRoutes = [
   {
     path: '/users',
     route: user_route_1.UserRoutes,
+  },
+  {
+    path: '/auths',
+    route: auth_route_1.AuthRoutes,
   },
   {
     path: '/products',

@@ -36,11 +36,6 @@ Object.defineProperty(exports, '__esModule', { value: true });
 exports.UserServices = void 0;
 const HttpError_1 = require('../../errors/HttpError');
 const user_model_1 = require('./user.model');
-const createUser = (payload) =>
-  __awaiter(void 0, void 0, void 0, function* () {
-    const createdUser = yield user_model_1.User.create(payload);
-    return createdUser;
-  });
 const getAllUsers = () =>
   __awaiter(void 0, void 0, void 0, function* () {
     const users = yield user_model_1.User.find();
@@ -60,16 +55,32 @@ const getUserById = (id) =>
     }
     return user;
   });
-const updateUserById = (id, payload) =>
+const updateUserById = (id, name, userEmail) =>
   __awaiter(void 0, void 0, void 0, function* () {
-    const updatedUser = yield user_model_1.User.findOneAndUpdate(
-      { _id: id, isDeleted: false },
-      { name: payload },
-      { new: true, runValidators: true },
-    );
-    if (!updatedUser) {
+    const user = yield user_model_1.User.findOne({ _id: id, isDeleted: false });
+    // check if user is exists
+    if (!user) {
       throw new HttpError_1.HttpError(404, 'No user found with ID');
     }
+    // check if user is banned
+    if (user.status === 'banned') {
+      throw new HttpError_1.HttpError(
+        403,
+        'Your account is banned. You cannot perform this action.',
+      );
+    }
+    // check if the email of the logged-in user matches the user
+    if (user.email !== userEmail) {
+      throw new HttpError_1.HttpError(
+        403,
+        'You are not allowed to update this user',
+      );
+    }
+    const updatedUser = yield user_model_1.User.findOneAndUpdate(
+      { _id: id, isDeleted: false },
+      { name: name },
+      { new: true, runValidators: true },
+    );
     return updatedUser;
   });
 const updateUserStatusById = (id, status) =>
@@ -88,23 +99,57 @@ const updateUserStatusById = (id, status) =>
     }
     return updatedStatus;
   });
+const updateUserRoleById = (id, role) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    const validRoles = ['user', 'admin'];
+    if (!validRoles.includes(role)) {
+      throw new HttpError_1.HttpError(400, `Invalid roles: ${role}`);
+    }
+    const user = yield user_model_1.User.findOne({ _id: id, isDeleted: false });
+    // check if user is exists
+    if (!user) {
+      throw new HttpError_1.HttpError(404, 'No user found with ID');
+    }
+    // check if user is banned
+    if (user.status === 'banned') {
+      throw new HttpError_1.HttpError(
+        403,
+        'The user is banned, You cannot update their role.',
+      );
+    }
+    const updatedRole = yield user_model_1.User.findOneAndUpdate(
+      { _id: id, isDeleted: false },
+      { role: role },
+      { new: true, runValidators: true },
+    );
+    return updatedRole;
+  });
 const deleteUserById = (id) =>
   __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.User.findOne({ _id: id, isDeleted: false });
+    // check if user is exists
+    if (!user) {
+      throw new HttpError_1.HttpError(404, 'No user found with ID');
+    }
+    // check if user is banned
+    if (user.status === 'banned') {
+      throw new HttpError_1.HttpError(
+        403,
+        'Your account is banned. You cannot perform this action.',
+      );
+    }
     const deletedUser = yield user_model_1.User.findOneAndUpdate(
       { _id: id },
       { isDeleted: true },
       { new: true },
     );
-    if (!deletedUser) {
-      throw new HttpError_1.HttpError(404, 'No user found with ID');
-    }
     return deletedUser;
   });
 exports.UserServices = {
-  createUser,
   getAllUsers,
   getUserById,
   updateUserById,
   updateUserStatusById,
+  updateUserRoleById,
   deleteUserById,
 };

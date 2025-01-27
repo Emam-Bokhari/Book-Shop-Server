@@ -9,6 +9,7 @@ const express_1 = __importDefault(require('express'));
 const cors_1 = __importDefault(require('cors'));
 const routes_1 = __importDefault(require('./app/routes'));
 const globalErrorHandler_1 = require('./app/middlewares/globalErrorHandler');
+const notFound_1 = __importDefault(require('./app/middlewares/notFound'));
 const app = (0, express_1.default)();
 // parser
 app.use(express_1.default.json());
@@ -21,4 +22,6 @@ app.get('/', (req, res) => {
 });
 // global error handler
 app.use(globalErrorHandler_1.globalErrorHandler);
+// not found handler
+app.use(notFound_1.default);
 exports.default = app;

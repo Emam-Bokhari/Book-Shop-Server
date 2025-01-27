@@ -14,12 +14,20 @@ router.post(
   OrderControllers.createOrderController,
 );
 
-router.get("/order-history", auth(USER_ROLE.user, USER_ROLE.admin), OrderControllers.getUserOrdersHistoryController)
+router.get(
+  '/order-history',
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  OrderControllers.getUserOrdersHistoryController,
+);
 
 router.get('/', auth(USER_ROLE.admin), OrderControllers.getAllOrdersController);
 
 router.get('/:id', auth(USER_ROLE.admin), OrderControllers.getOrderController);
 
-router.patch('/:id/status', auth(USER_ROLE.admin), OrderControllers.updateOrderStatusController);
+router.patch(
+  '/:id/status',
+  auth(USER_ROLE.admin),
+  OrderControllers.updateOrderStatusController,
+);
 
 export const OrderRoutes = router;

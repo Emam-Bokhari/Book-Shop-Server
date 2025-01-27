@@ -37,19 +37,6 @@ exports.UserControllers = void 0;
 const user_service_1 = require('./user.service');
 const asyncHandler_1 = require('../../utils/global/asyncHandler');
 const sendResponse_1 = require('../../utils/global/sendResponse');
-const createUserController = (0, asyncHandler_1.asyncHandler)((req, res) =>
-  __awaiter(void 0, void 0, void 0, function* () {
-    const userPayload = req.body;
-    const createdUser =
-      yield user_service_1.UserServices.createUser(userPayload);
-    (0, sendResponse_1.sendResponse)(res, {
-      success: true,
-      message: 'User created successfully',
-      statusCode: 201,
-      data: createdUser,
-    });
-  }),
-);
 const getAllUsersController = (0, asyncHandler_1.asyncHandler)((req, res) =>
   __awaiter(void 0, void 0, void 0, function* () {
     const users = yield user_service_1.UserServices.getAllUsers();
@@ -76,10 +63,12 @@ const getUserController = (0, asyncHandler_1.asyncHandler)((req, res) =>
 const updateUserController = (0, asyncHandler_1.asyncHandler)((req, res) =>
   __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
+    const userEmail = req.user.email;
     const { name } = req.body;
     const updatedUser = yield user_service_1.UserServices.updateUserById(
       id,
       name,
+      userEmail,
     );
     (0, sendResponse_1.sendResponse)(res, {
       success: true,
@@ -104,6 +93,22 @@ const updateUserStatusController = (0, asyncHandler_1.asyncHandler)(
       });
     }),
 );
+const updateUserRoleController = (0, asyncHandler_1.asyncHandler)((req, res) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const { role } = req.body;
+    const updatedRole = yield user_service_1.UserServices.updateUserRoleById(
+      id,
+      role,
+    );
+    (0, sendResponse_1.sendResponse)(res, {
+      success: true,
+      message: 'User role update successfully',
+      statusCode: 200,
+      data: updatedRole,
+    });
+  }),
+);
 const deleteUserController = (0, asyncHandler_1.asyncHandler)((req, res) =>
   __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
@@ -117,10 +122,10 @@ const deleteUserController = (0, asyncHandler_1.asyncHandler)((req, res) =>
   }),
 );
 exports.UserControllers = {
-  createUserController,
   getAllUsersController,
   getUserController,
   updateUserController,
   updateUserStatusController,
+  updateUserRoleController,
   deleteUserController,
 };

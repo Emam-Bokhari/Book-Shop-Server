@@ -41,8 +41,9 @@ const mongoose_1 = require('mongoose');
 const createOrderController = (0, asyncHandler_1.asyncHandler)((req, res) =>
   __awaiter(void 0, void 0, void 0, function* () {
     const orderPayload = req.body;
+    const userEmail = req.user.email;
     const { createdOrder, paymentUrl } =
-      yield order_service_1.OrderServices.createOrder(orderPayload);
+      yield order_service_1.OrderServices.createOrder(orderPayload, userEmail);
     const orderData =
       createdOrder instanceof mongoose_1.Document
         ? createdOrder.toObject()
@@ -57,7 +58,8 @@ const createOrderController = (0, asyncHandler_1.asyncHandler)((req, res) =>
 );
 const getAllOrdersController = (0, asyncHandler_1.asyncHandler)((req, res) =>
   __awaiter(void 0, void 0, void 0, function* () {
-    const orders = yield order_service_1.OrderServices.getAllOrders();
+    const query = req.query;
+    const orders = yield order_service_1.OrderServices.getAllOrders(query);
     (0, sendResponse_1.sendResponse)(res, {
       success: true,
       message: 'Orders retrieved successfully',
@@ -78,6 +80,20 @@ const getOrderController = (0, asyncHandler_1.asyncHandler)((req, res) =>
     });
   }),
 );
+const getUserOrdersHistoryController = (0, asyncHandler_1.asyncHandler)(
+  (req, res) =>
+    __awaiter(void 0, void 0, void 0, function* () {
+      const userEmail = req.user.email;
+      const userOrders =
+        yield order_service_1.OrderServices.getUserOrdersHistory(userEmail);
+      (0, sendResponse_1.sendResponse)(res, {
+        success: true,
+        message: 'User order history retrieved successfully',
+        statusCode: 200,
+        data: userOrders,
+      });
+    }),
+);
 const updateOrderStatusController = (0, asyncHandler_1.asyncHandler)(
   (req, res) =>
     __awaiter(void 0, void 0, void 0, function* () {
@@ -97,5 +113,6 @@ exports.OrderControllers = {
   createOrderController,
   getAllOrdersController,
   getOrderController,
+  getUserOrdersHistoryController,
   updateOrderStatusController,
 };

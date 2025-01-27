@@ -19,11 +19,16 @@ router.get('/', ProductControllers.getAllProductsController);
 router.get('/:id', ProductControllers.getProductController);
 
 router.patch(
-  '/:id', auth(USER_ROLE.admin),
+  '/:id',
+  auth(USER_ROLE.admin),
   validateRequestSchema(ProductValidationSchema.updateProductValidationSchema),
   ProductControllers.updateProductController,
 );
 
-router.delete('/:id', auth(USER_ROLE.admin), ProductControllers.deleteProductController);
+router.delete(
+  '/:id',
+  auth(USER_ROLE.admin),
+  ProductControllers.deleteProductController,
+);
 
 export const ProductRoutes = router;

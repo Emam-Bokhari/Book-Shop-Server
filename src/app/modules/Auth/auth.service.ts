@@ -6,10 +6,13 @@ import { TLoginUser } from './auth.interface';
 import jwt from 'jsonwebtoken';
 
 const registerUser = async (payload: TUser) => {
-  const existingUser = await User.isUserExists(payload?.email)
+  const existingUser = await User.isUserExists(payload?.email);
 
   if (existingUser) {
-    throw new HttpError(400, `User with this email '${payload.email}' already exists. Please use a different email.`)
+    throw new HttpError(
+      400,
+      `User with this email '${payload.email}' already exists. Please use a different email.`,
+    );
   }
 
   const registeredUser = await User.create(payload);

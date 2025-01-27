@@ -14,23 +14,27 @@ type TOrderResponse = {
   paymentUrl: string;
 };
 
-const createOrder = async (payload: TOrder, userEmail: string): Promise<TOrderResponse> => {
-
+const createOrder = async (
+  payload: TOrder,
+  userEmail: string,
+): Promise<TOrderResponse> => {
   const user = await User.isUserExists(userEmail);
 
   // check if user is exists
   if (!user) {
-    throw new HttpError(404, "User not found")
+    throw new HttpError(404, 'User not found');
   }
 
   // check is user is banned
-  if (user.status === "banned") {
-    throw new HttpError(403, "Your account is banned. You cannot perform this action.")
+  if (user.status === 'banned') {
+    throw new HttpError(
+      403,
+      'Your account is banned. You cannot perform this action.',
+    );
   }
 
   // set user id
   payload.userId = user._id;
-
 
   const product = await Product.findOne({ _id: payload.product });
 
@@ -104,14 +108,14 @@ const createOrder = async (payload: TOrder, userEmail: string): Promise<TOrderRe
         product_name: product.title || '',
         product_category: product.category || '',
         product_profile: 'general',
-        cus_name: user.name || "Unknown",
+        cus_name: user.name || 'Unknown',
         cus_email: user.email || 'customer@example.com',
         cus_add1: finalShippingAddress?.address || '',
         cus_city: finalShippingAddress?.city || '',
         cus_postcode: finalShippingAddress?.postalCode || '',
         cus_country: finalShippingAddress?.country || '',
         cus_phone: finalShippingAddress?.phone || '',
-        ship_name: user.name || "Unknown",
+        ship_name: user.name || 'Unknown',
         ship_add1: finalShippingAddress?.address || '',
         ship_city: finalShippingAddress?.city || '',
         ship_postcode: finalShippingAddress?.postalCode || '',
@@ -157,7 +161,10 @@ const createOrder = async (payload: TOrder, userEmail: string): Promise<TOrderRe
 };
 
 const getAllOrders = async (query: Record<string, unknown>) => {
-  const orderQuery = new QueryBuilder(Order.find().populate("userId"), query).filter().sortBy().paginate()
+  const orderQuery = new QueryBuilder(Order.find().populate('userId'), query)
+    .filter()
+    .sortBy()
+    .paginate();
 
   const orders = await orderQuery.modelQuery;
 
@@ -169,7 +176,7 @@ const getAllOrders = async (query: Record<string, unknown>) => {
 };
 
 const getOrderById = async (id: string) => {
-  const order = await Order.findById(id).populate("userId");
+  const order = await Order.findById(id).populate('userId');
 
   if (!order) {
     throw new HttpError(404, 'No order found with ID');
@@ -179,27 +186,29 @@ const getOrderById = async (id: string) => {
 };
 
 const getUserOrdersHistory = async (userEmail: string) => {
-
   const user = await User.isUserExists(userEmail);
 
   // check if user is exits
   if (!user) {
-    throw new HttpError(404, "User not found")
+    throw new HttpError(404, 'User not found');
   }
 
   // check if user is banned
-  if (user.status === "banned") {
-    throw new HttpError(403, "Your account has been banned, and access is restricted.")
+  if (user.status === 'banned') {
+    throw new HttpError(
+      403,
+      'Your account has been banned, and access is restricted.',
+    );
   }
 
-  const userOrders = await Order.find({ userId: user._id }).populate("userId");
+  const userOrders = await Order.find({ userId: user._id }).populate('userId');
 
   if (!userOrders || userOrders.length === 0) {
-    throw new HttpError(404, "No order were found this user")
+    throw new HttpError(404, 'No order were found this user');
   }
 
   return userOrders;
-}
+};
 
 const updateOrderStatusById = async (id: string, status: string) => {
   const validStatuses = ['pending', 'shipping', 'delivered', 'cancelled'];

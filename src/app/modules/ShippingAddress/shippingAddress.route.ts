@@ -16,9 +16,17 @@ router.post(
   ShippingAddressControllers.createShippingAddressController,
 );
 
-router.get('/', auth(USER_ROLE.admin), ShippingAddressControllers.getAllShippingAddressController);
+router.get(
+  '/',
+  auth(USER_ROLE.admin),
+  ShippingAddressControllers.getAllShippingAddressController,
+);
 
-router.get('/:id', auth(USER_ROLE.user, USER_ROLE.admin), ShippingAddressControllers.getShippingAddressController);
+router.get(
+  '/:id',
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  ShippingAddressControllers.getShippingAddressController,
+);
 
 router.patch(
   '/:id',

@@ -4,9 +4,11 @@ import { User } from '../User/user.model';
 import { TShippingAddress } from './shippingAddress.interface';
 import { ShippingAddress } from './shippingAddress.model';
 
-const createShippingAddress = async (payload: TShippingAddress, userEmail: string) => {
-
-  const user = await User.isUserExists(userEmail)
+const createShippingAddress = async (
+  payload: TShippingAddress,
+  userEmail: string,
+) => {
+  const user = await User.isUserExists(userEmail);
 
   // check if user is exists
   if (!user) {
@@ -33,8 +35,13 @@ const createShippingAddress = async (payload: TShippingAddress, userEmail: strin
 };
 
 const getAllShippingAddress = async (query: Record<string, unknown>) => {
-
-  const shippingAddressQuery = new QueryBuilder(ShippingAddress.find().populate("userId"), query).filter().sortBy().paginate()
+  const shippingAddressQuery = new QueryBuilder(
+    ShippingAddress.find().populate('userId'),
+    query,
+  )
+    .filter()
+    .sortBy()
+    .paginate();
 
   const shippingAddresses = await shippingAddressQuery.modelQuery;
 
@@ -46,7 +53,7 @@ const getAllShippingAddress = async (query: Record<string, unknown>) => {
 };
 
 const getShippingAddressById = async (id: string) => {
-  const shippingAddress = await ShippingAddress.findById(id).populate("userId");
+  const shippingAddress = await ShippingAddress.findById(id).populate('userId');
 
   if (!shippingAddress) {
     throw new HttpError(404, 'No shipping address found with ID');

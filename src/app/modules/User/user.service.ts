@@ -22,8 +22,7 @@ const getUserById = async (id: string) => {
 };
 
 const updateUserById = async (id: string, name: string, userEmail: string) => {
-
-  const user = await User.findOne({ _id: id, isDeleted: false })
+  const user = await User.findOne({ _id: id, isDeleted: false });
 
   // check if user is exists
   if (!user) {
@@ -31,14 +30,16 @@ const updateUserById = async (id: string, name: string, userEmail: string) => {
   }
 
   // check if user is banned
-  if (user.status === "banned") {
-    throw new HttpError(403, "Your account is banned. You cannot perform this action.")
+  if (user.status === 'banned') {
+    throw new HttpError(
+      403,
+      'Your account is banned. You cannot perform this action.',
+    );
   }
-
 
   // check if the email of the logged-in user matches the user
   if (user.email !== userEmail) {
-    throw new HttpError(403, "You are not allowed to update this user")
+    throw new HttpError(403, 'You are not allowed to update this user');
   }
 
   const updatedUser = await User.findOneAndUpdate(
@@ -46,7 +47,6 @@ const updateUserById = async (id: string, name: string, userEmail: string) => {
     { name: name },
     { new: true, runValidators: true },
   );
-
 
   return updatedUser;
 };
@@ -78,7 +78,7 @@ const updateUserRoleById = async (id: string, role: string) => {
     throw new HttpError(400, `Invalid roles: ${role}`);
   }
 
-  const user = await User.findOne({ _id: id, isDeleted: false })
+  const user = await User.findOne({ _id: id, isDeleted: false });
 
   // check if user is exists
   if (!user) {
@@ -86,8 +86,11 @@ const updateUserRoleById = async (id: string, role: string) => {
   }
 
   // check if user is banned
-  if (user.status === "banned") {
-    throw new HttpError(403, "The user is banned, You cannot update their role.")
+  if (user.status === 'banned') {
+    throw new HttpError(
+      403,
+      'The user is banned, You cannot update their role.',
+    );
   }
 
   const updatedRole = await User.findOneAndUpdate(
@@ -96,13 +99,11 @@ const updateUserRoleById = async (id: string, role: string) => {
     { new: true, runValidators: true },
   );
 
-
-
   return updatedRole;
 };
 
 const deleteUserById = async (id: string) => {
-  const user = await User.findOne({ _id: id, isDeleted: false })
+  const user = await User.findOne({ _id: id, isDeleted: false });
 
   // check if user is exists
   if (!user) {
@@ -110,8 +111,11 @@ const deleteUserById = async (id: string) => {
   }
 
   // check if user is banned
-  if (user.status === "banned") {
-    throw new HttpError(403, "Your account is banned. You cannot perform this action.")
+  if (user.status === 'banned') {
+    throw new HttpError(
+      403,
+      'Your account is banned. You cannot perform this action.',
+    );
   }
 
   const deletedUser = await User.findOneAndUpdate(
@@ -119,7 +123,6 @@ const deleteUserById = async (id: string) => {
     { isDeleted: true },
     { new: true },
   );
-
 
   return deletedUser;
 };

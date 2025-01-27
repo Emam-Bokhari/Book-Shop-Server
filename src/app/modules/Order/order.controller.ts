@@ -6,8 +6,10 @@ import { Document } from 'mongoose';
 const createOrderController = asyncHandler(async (req, res) => {
   const orderPayload = req.body;
   const userEmail = req.user.email;
-  const { createdOrder, paymentUrl } =
-    await OrderServices.createOrder(orderPayload, userEmail);
+  const { createdOrder, paymentUrl } = await OrderServices.createOrder(
+    orderPayload,
+    userEmail,
+  );
 
   const orderData =
     createdOrder instanceof Document ? createdOrder.toObject() : createdOrder;
@@ -53,11 +55,11 @@ const getUserOrdersHistoryController = asyncHandler(async (req, res) => {
 
   sendResponse(res, {
     success: true,
-    message: "User order history retrieved successfully",
+    message: 'User order history retrieved successfully',
     statusCode: 200,
     data: userOrders,
-  })
-})
+  });
+});
 
 const updateOrderStatusController = asyncHandler(async (req, res) => {
   const id = req.params.id;
