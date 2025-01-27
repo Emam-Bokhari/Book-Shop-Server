@@ -15,7 +15,8 @@ const createProductController = asyncHandler(async (req, res) => {
 });
 
 const getAllProductsController = asyncHandler(async (req, res) => {
-  const products = await ProductServices.getAllProducts();
+  const query = req.query;
+  const products = await ProductServices.getAllProducts(query);
 
   sendResponse(res, {
     success: true,
