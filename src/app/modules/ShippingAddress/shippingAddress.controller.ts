@@ -4,8 +4,9 @@ import { ShippingAddressServices } from './shippingAddress.service';
 
 const createShippingAddressController = asyncHandler(async (req, res) => {
   const shippingAddressPayload = req.body;
+  const userEmail = req.user.email;
   const createdShippingAddress =
-    await ShippingAddressServices.createShippingAddress(shippingAddressPayload);
+    await ShippingAddressServices.createShippingAddress(shippingAddressPayload, userEmail);
 
   sendResponse(res, {
     success: true,

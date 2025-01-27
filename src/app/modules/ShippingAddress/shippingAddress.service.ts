@@ -3,13 +3,18 @@ import { User } from '../User/user.model';
 import { TShippingAddress } from './shippingAddress.interface';
 import { ShippingAddress } from './shippingAddress.model';
 
-const createShippingAddress = async (payload: TShippingAddress) => {
-  const user = await User.findOne({ _id: payload.userId }).select('_id').lean();
+const createShippingAddress = async (payload: TShippingAddress, userEmail: string) => {
 
+  const user = await User.isUserExists(userEmail)
+
+  // check if user is exists
   if (!user) {
-    throw new HttpError(404, 'User not found. Please provide a valid user ID.');
+    throw new HttpError(404, 'User not found.');
   }
 
+  payload.userId = user._id;
+
+  // check is default shipping address is exists
   const existingShippingAddress = await ShippingAddress.findOne({
     userId: user,
   });
@@ -27,7 +32,7 @@ const createShippingAddress = async (payload: TShippingAddress) => {
 };
 
 const getAllShippingAddress = async () => {
-  const shippingAddresses = await ShippingAddress.find();
+  const shippingAddresses = await ShippingAddress.find().populate("userId");
 
   if (shippingAddresses.length === 0) {
     throw new HttpError(404, 'No shipping address were found in the database');
@@ -37,7 +42,7 @@ const getAllShippingAddress = async () => {
 };
 
 const getShippingAddressById = async (id: string) => {
-  const shippingAddress = await ShippingAddress.findById(id);
+  const shippingAddress = await ShippingAddress.findById(id).populate("userId");
 
   if (!shippingAddress) {
     throw new HttpError(404, 'No shipping address found with ID');

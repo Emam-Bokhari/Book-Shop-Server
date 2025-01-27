@@ -13,8 +13,23 @@ type TOrderResponse = {
   paymentUrl: string;
 };
 
-const createOrder = async (payload: TOrder): Promise<TOrderResponse> => {
-  // TODO: check if user is exists
+const createOrder = async (payload: TOrder, userEmail: string): Promise<TOrderResponse> => {
+
+  const user = await User.isUserExists(userEmail);
+
+  // check if user is exists
+  if (!user) {
+    throw new HttpError(404, "User not found")
+  }
+
+  // check is user is banned
+  if (user.status === "banned") {
+    throw new HttpError(403, "Your account is banned. You cannot perform this action.")
+  }
+
+  // set user id
+  payload.userId = user._id;
+
 
   const product = await Product.findOne({ _id: payload.product });
 
