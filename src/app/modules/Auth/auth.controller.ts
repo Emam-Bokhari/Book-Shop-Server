@@ -4,13 +4,13 @@ import { AuthServices } from './auth.service';
 
 const loginUserController = asyncHandler(async (req, res) => {
   const loginUserPayload = req.body;
-  const result = await AuthServices.loginUser(loginUserPayload);
+  const loginResult = await AuthServices.loginUser(loginUserPayload);
 
   sendResponse(res, {
     success: true,
     statusCode: 201,
     message: 'User login successfully',
-    data: result,
+    data: loginResult,
   });
 });
 

@@ -1,8 +1,15 @@
 import config from '../../config';
 import { HttpError } from '../../errors/HttpError';
+import { TUser } from '../User/user.interface';
 import { User } from '../User/user.model';
 import { TLoginUser } from './auth.interface';
 import jwt from 'jsonwebtoken';
+
+const registerUser = async (payload: TUser) => {
+  const registeredUser = await User.create(payload);
+
+  return registeredUser;
+};
 
 const loginUser = async (payload: TLoginUser) => {
   const user = await User.isUserExists(payload.email);
@@ -26,7 +33,6 @@ const loginUser = async (payload: TLoginUser) => {
   }
 
   // create jwt token
-
   const jwtPayload = {
     email: user?.email,
     role: user?.role,
@@ -42,5 +48,6 @@ const loginUser = async (payload: TLoginUser) => {
 };
 
 export const AuthServices = {
+  registerUser,
   loginUser,
 };
