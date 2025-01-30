@@ -44,7 +44,7 @@ To get started with the project locally, follow these steps:
 First, clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/Emam-Bokhari/Book-Shop-Backend
+git clone https://github.com/Emam-Bokhari/Book-Shop-Server
 
 ```
 
@@ -53,7 +53,7 @@ git clone https://github.com/Emam-Bokhari/Book-Shop-Backend
 Go to the project directory:
 
 ```bash
-cd Book-Shop-Backend
+cd Book-Shop-Server
 
 ```
 
