@@ -11,8 +11,11 @@ export type TShippingAddressDetails = {
 
 export type TOrder = {
   userId?: Types.ObjectId;
-  product: Types.ObjectId;
-  quantity: number;
+  products: {
+    productId: Types.ObjectId;
+    quantity: number;
+  }[];
+  // quantity: number;
   totalAmount?: number;
   paymentMethod: 'sslCommerz' | 'cashOnDelivery';
   paymentStatus?: 'pending' | 'completed' | 'failed' | 'canceled';

@@ -12,8 +12,8 @@ const createShippingAddressDetailsValidationSchema = z.object({
 const createOrderValidationSchema = z.object({
   body: z.object({
     userId: z.string().optional(),
-    product: z.string(),
-    quantity: z.number().int(),
+    products: z.array(z.object({ productId: z.string(), quantity: z.number().int() })),
+    // quantity: z.number().int(),
     totalAmount: z.number().optional(),
     paymentMethod: z.enum(['sslCommerz', 'cashOnDelivery']),
     paymentStatus: z

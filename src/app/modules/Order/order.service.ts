@@ -20,12 +20,12 @@ const createOrder = async (
 ): Promise<TOrderResponse> => {
   const user = await User.isUserExists(userEmail);
 
-  // check if user is exists
+  // check if user exists
   if (!user) {
     throw new HttpError(404, 'User not found');
   }
 
-  // check is user is banned
+  // check if user is banned
   if (user.status === 'banned') {
     throw new HttpError(
       403,
@@ -33,33 +33,45 @@ const createOrder = async (
     );
   }
 
-  // set user id
+  // set user ID
   payload.userId = user._id;
 
-  const product = await Product.findOne({ _id: payload.product });
-
-  // check if product is exists
-  if (!product) {
-    throw new HttpError(404, 'No product found with ID');
+  // Check if products array exists and has at least one product
+  if (!payload.products || payload.products.length === 0) {
+    throw new HttpError(400, 'At least one product is required.');
   }
 
-  // check if product is available
-  if (product.quantity <= 0) {
-    throw new HttpError(
-      400,
-      'Product is currently unavailable. Please check back later or choose another product.',
-    );
+  // Fetch all products in the order
+  const productIds = payload.products.map((item) => item.productId);
+  const products = await Product.find({ _id: { $in: productIds } });
+
+  if (products.length !== payload.products.length) {
+    throw new HttpError(404, 'One or more products not found.');
   }
 
-  if (payload.quantity > product.quantity) {
-    throw new HttpError(
-      400,
-      `Only ${product.quantity} units of this product are available. Please update your order quantity`,
-    );
+  let totalAmount = 0;
+
+  for (const item of payload.products) {
+    const product = products.find((p) => p._id.toString() === item.productId.toString());
+
+    if (!product) {
+      throw new HttpError(404, `Product with ID ${item.productId} not found.`);
+    }
+
+    if (product.quantity <= 0) {
+      throw new HttpError(400, `Product "${product.title}" is out of stock.`);
+    }
+
+    if (item.quantity > product.quantity) {
+      throw new HttpError(
+        400,
+        `Only ${product.quantity} units of "${product.title}" are available. Please update your order quantity.`
+      );
+    }
+
+    totalAmount += product.price * item.quantity;
   }
 
-  // total amount of product
-  const totalAmount = product.price * payload.quantity;
   payload.totalAmount = totalAmount;
 
   // handle shipping address
@@ -70,7 +82,6 @@ const createOrder = async (
   }
 
   if (payload.shippingAddress) {
-    // check if default shipping address
     const defaultShippingAddress = await ShippingAddress.findOne({
       _id: payload.shippingAddress,
     });
@@ -91,8 +102,7 @@ const createOrder = async (
     finalShippingAddress = payload.shippingAddressDetails;
   }
 
-  // payment method integration
-  // if payment method is sslCommerz, initiate the payment
+  // Payment method handling
   if (payload.paymentMethod === 'sslCommerz') {
     const transactionId = generateTransactionId();
 
@@ -105,8 +115,8 @@ const createOrder = async (
         fail_url: (config.fail_url as string) || '',
         cancel_url: (config.cancel_url as string) || '',
         shipping_method: 'Courier',
-        product_name: product.title || '',
-        product_category: product.category || '',
+        product_name: products.map((p) => p.title).join(', '),
+        product_category: products.map((p) => p.category).join(', '),
         product_profile: 'general',
         cus_name: user.name || 'Unknown',
         cus_email: user.email || 'customer@example.com',
@@ -127,14 +137,15 @@ const createOrder = async (
       const createdOrder = await Order.create({
         ...payload,
         shippingAddressDetails: finalShippingAddress,
-        // transactionId,
       });
 
-      // decrease product quantity after creating the order
-      await Product.findOneAndUpdate(
-        { _id: payload.product },
-        { $inc: { quantity: -payload.quantity } },
-      );
+      // Decrease product quantity after creating the order
+      for (const item of payload.products) {
+        await Product.findOneAndUpdate(
+          { _id: item.productId },
+          { $inc: { quantity: -item.quantity } }
+        );
+      }
 
       return {
         createdOrder,
@@ -145,23 +156,26 @@ const createOrder = async (
     }
   }
 
-  // create the order
+  // Create the order
   const createdOrder = await Order.create({
     ...payload,
     shippingAddressDetails: finalShippingAddress,
   });
 
-  // decrease product quantity after creating the order
-  await Product.findOneAndUpdate(
-    { _id: payload.product },
-    { $inc: { quantity: -payload.quantity } },
-  );
+  // Decrease product quantity after creating the order
+  for (const item of payload.products) {
+    await Product.findOneAndUpdate(
+      { _id: item.productId },
+      { $inc: { quantity: -item.quantity } }
+    );
+  }
 
   return { createdOrder, paymentUrl: '' };
 };
 
+
 const getAllOrders = async (query: Record<string, unknown>) => {
-  const orderQuery = new QueryBuilder(Order.find().populate('userId'), query)
+  const orderQuery = new QueryBuilder(Order.find().populate('userId').populate("products.productId"), query)
     .filter()
     .sortBy()
     .paginate();
@@ -176,7 +190,7 @@ const getAllOrders = async (query: Record<string, unknown>) => {
 };
 
 const getOrderById = async (id: string) => {
-  const order = await Order.findById(id).populate('userId');
+  const order = await Order.findById(id).populate('userId').populate("products.productId");
 
   if (!order) {
     throw new HttpError(404, 'No order found with ID');
