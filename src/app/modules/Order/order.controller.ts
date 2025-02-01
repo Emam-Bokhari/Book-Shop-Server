@@ -27,13 +27,14 @@ const createOrderController = asyncHandler(async (req, res) => {
 
 const getAllOrdersController = asyncHandler(async (req, res) => {
   const query = req.query;
-  const orders = await OrderServices.getAllOrders(query);
+  const result = await OrderServices.getAllOrders(query);
 
   sendResponse(res, {
     success: true,
     message: 'Orders retrieved successfully',
     statusCode: 200,
-    data: orders,
+    meta: result.meta,
+    data: result.result,
   });
 });
 
@@ -50,14 +51,22 @@ const getOrderController = asyncHandler(async (req, res) => {
 });
 
 const getUserOrdersHistoryController = asyncHandler(async (req, res) => {
-  const userEmail = req.user.email;
-  const userOrders = await OrderServices.getUserOrdersHistory(userEmail);
+
+  const loggedInUserEmail = req.user.email;
+
+  const requestedUserEmail = req.params.email;
+  const query = req.query;
+
+
+  // const userEmail = req.user.email;
+  const result = await OrderServices.getUserOrdersHistory(loggedInUserEmail, requestedUserEmail, query);
 
   sendResponse(res, {
     success: true,
     message: 'User order history retrieved successfully',
     statusCode: 200,
-    data: userOrders,
+    meta: result.meta,
+    data: result.result,
   });
 });
 

@@ -1,14 +1,22 @@
+import QueryBuilder from '../../builder/QueryBuilder';
 import { HttpError } from '../../errors/HttpError';
 import { User } from './user.model';
 
-const getAllUsers = async () => {
-  const users = await User.find();
+const getAllUsers = async (query: Record<string, unknown>) => {
+  const userQuery = new QueryBuilder(User.find(), query).filter().sortBy().paginate()
+  // const users = await User.find();
 
-  if (users.length === 0) {
+  const meta = await userQuery.countTotal();
+  const result = await userQuery.modelQuery;
+
+  if (result.length === 0) {
     throw new HttpError(404, 'No user record were found in the database');
   }
 
-  return users;
+  return {
+    meta,
+    result,
+  };
 };
 
 const getUserById = async (id: string) => {

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const createShippingAddressDetailsValidationSchema = z.object({
-  name: z.enum(['home', 'office', 'other']),
+  name: z.string().trim(),
   phone: z.string().trim(),
   address: z.string().trim().max(200, 'Address can not exceed 200 characters'),
   postalCode: z.string().trim(),
@@ -15,13 +15,13 @@ const createOrderValidationSchema = z.object({
     products: z.array(z.object({ productId: z.string(), quantity: z.number().int() })),
     // quantity: z.number().int(),
     totalAmount: z.number().optional(),
-    paymentMethod: z.enum(['sslCommerz', 'cashOnDelivery']),
+    paymentMethod: z.string().default("sslCommerz"),
     paymentStatus: z
       .enum(['pending', 'completed', 'failed', 'canceled'])
       .default('pending'),
-    shippingAddress: z.string().optional(),
+    // shippingAddress: z.string().optional(),
     shippingAddressDetails:
-      createShippingAddressDetailsValidationSchema.optional(),
+      createShippingAddressDetailsValidationSchema,
     status: z.enum(['pending', 'shipping', 'delivered']).default('pending'),
     orderDate: z.string().optional(),
     transactionId: z.string().optional(),

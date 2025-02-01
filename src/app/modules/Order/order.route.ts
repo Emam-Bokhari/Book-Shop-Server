@@ -15,7 +15,7 @@ router.post(
 );
 
 router.get(
-  '/order-history',
+  '/order-history/:email',
   auth(USER_ROLE.user, USER_ROLE.admin),
   OrderControllers.getUserOrdersHistoryController,
 );
@@ -29,5 +29,6 @@ router.patch(
   auth(USER_ROLE.admin),
   OrderControllers.updateOrderStatusController,
 );
+
 
 export const OrderRoutes = router;
