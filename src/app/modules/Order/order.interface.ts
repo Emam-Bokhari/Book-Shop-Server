@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 
 export type TShippingAddressDetails = {
-  name: 'home' | 'office' | 'other';
+  name: string;
   phone: string;
   address: string;
   postalCode: string;
@@ -11,13 +11,16 @@ export type TShippingAddressDetails = {
 
 export type TOrder = {
   userId?: Types.ObjectId;
-  product: Types.ObjectId;
-  quantity: number;
+  products: {
+    productId: Types.ObjectId;
+    quantity: number;
+  }[];
+  // quantity: number;
   totalAmount?: number;
-  paymentMethod: 'sslCommerz' | 'cashOnDelivery';
+  paymentMethod?: string;
   paymentStatus?: 'pending' | 'completed' | 'failed' | 'canceled';
-  shippingAddress?: Types.ObjectId;
-  shippingAddressDetails?: TShippingAddressDetails;
+  // shippingAddress?: Types.ObjectId;
+  shippingAddressDetails: TShippingAddressDetails;
   status: 'pending' | 'shipping' | 'delivered';
   orderDate?: Date;
   transactionId?: string;

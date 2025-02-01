@@ -17,13 +17,17 @@ const getAllProducts = async (query: Record<string, unknown>) => {
     .sortBy()
     .paginate();
 
-  const products = await productQuery.modelQuery;
+  const meta = await productQuery.countTotal();
+  const result = await productQuery.modelQuery;
 
-  if (products.length === 0) {
+  if (result.length === 0) {
     throw new HttpError(404, 'No product were found in the database');
   }
 
-  return products;
+  return {
+    meta,
+    result,
+  };
 };
 
 const getProductById = async (id: string) => {

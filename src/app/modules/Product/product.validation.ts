@@ -94,12 +94,7 @@ const updateProductValidationSchema = z.object({
       .trim()
       .max(1000, 'Description can not exceed 1000 characters')
       .optional(),
-    price: z
-      .number()
-      .int()
-      .min(1, 'Price is required and must be price at least 1')
-      .max(10000, 'Price can not exceed 10000')
-      .optional(),
+    price: z.number().int().max(10000, 'Price can not exceed 10000').optional(),
     image: z.string().optional(),
     publisher: z
       .string()
@@ -130,23 +125,16 @@ const updateProductValidationSchema = z.object({
       ])
       .optional(),
     pages: z.number().int().optional(),
-    rating: z
-      .number()
-      .int()
-      .min(1, 'Rating is required and must be at least 1')
-      .max(5, 'Rating can not exceed 5')
-      .optional(),
+    rating: z.number().int().max(5, 'Rating can not exceed 5').optional(),
     discount: z
       .number()
       .int()
-      .min(0, 'Discount cannot be negative')
       .max(100, 'Discount cannot exceed 100')
       .optional(),
     format: z.enum(['hardcover', 'paperback', 'eBook', 'audioBook']).optional(),
     quantity: z
       .number()
       .int()
-      .min(0, 'Quantity cannot be negative')
       .max(10000, 'Quantity cannot exceed 10,000')
       .optional(),
     isDeleted: z.boolean().default(false),

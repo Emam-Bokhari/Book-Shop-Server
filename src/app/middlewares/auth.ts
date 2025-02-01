@@ -9,17 +9,18 @@ import { TUserRole } from '../modules/User/user.interface';
 export const auth = (...requiredRoles: TUserRole[]) => {
   return asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
-      const authHeader = req.headers.authorization;
+      const token = req.headers.authorization;
 
       // // check if token is Bearer or not
-      if (!authHeader || !authHeader.startsWith('Bearer')) {
-        throw new HttpError(
-          401,
-          'Missing or invalid authorization header. Please ensure the request includes a valid Bearer token',
-        );
-      }
+      // if (!authHeader || !authHeader.startsWith('Bearer')) {
+      //   throw new HttpError(
+      //     401,
+      //     'Missing or invalid authorization header. Please ensure the request includes a valid Bearer token',
+      //   );
+      // }
 
-      const token = authHeader.split(' ')[1];
+      // const token = authHeader.split(' ')[1];
+      // console.log(token)
 
       // // check if no token
       if (!token) {

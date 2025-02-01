@@ -4,7 +4,7 @@ import { TOrder, TShippingAddressDetails } from './order.interface';
 const shippingAddressDetailsSchema = new Schema<TShippingAddressDetails>({
   name: {
     type: String,
-    enum: ['home', 'office', 'other'],
+    trim: true,
     required: true,
   },
   phone: {
@@ -40,24 +40,34 @@ const orderSchema = new Schema<TOrder>(
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
-    product: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: 'Product',
-    },
-    quantity: {
-      type: Number,
-      required: true,
-    },
+    products: [
+      new Schema(
+        {
+          productId: {
+            type: Schema.Types.ObjectId,
+            ref: 'Product',
+            required: true,
+          },
+          quantity: {
+            type: Number,
+            required: true,
+            min: 1,
+          },
+        },
+        { _id: false },
+      ),
+    ],
+    // quantity: {
+    //   type: Number,
+    //   required: true,
+    // },
     totalAmount: {
       type: Number,
     },
     paymentMethod: {
       type: String,
-      enum: {
-        values: ['sslCommerz', 'cashOnDelivery'],
-        message: '{VALUE} is not a valid payment method',
-      },
+      trim: true,
+      default: 'sslCommerz',
       required: true,
     },
     paymentStatus: {
@@ -68,12 +78,13 @@ const orderSchema = new Schema<TOrder>(
       },
       default: 'pending',
     },
-    shippingAddress: {
-      type: Schema.Types.ObjectId,
-      ref: 'ShippingAddress',
-    },
+    // shippingAddress: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: 'ShippingAddress',
+    // },
     shippingAddressDetails: {
       type: shippingAddressDetailsSchema,
+      required: true,
     },
     status: {
       type: String,

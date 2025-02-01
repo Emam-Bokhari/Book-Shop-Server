@@ -1,10 +1,10 @@
+import app from '../../../app';
 import QueryBuilder from '../../builder/QueryBuilder';
-import config from '../../config';
 import { HttpError } from '../../errors/HttpError';
 import { Product } from '../Product/product.model';
-import { ShippingAddress } from '../ShippingAddress/shippingAddress.model';
+// import { ShippingAddress } from '../ShippingAddress/shippingAddress.model';
 import { User } from '../User/user.model';
-import { TOrder, TShippingAddressDetails } from './order.interface';
+import { TOrder } from './order.interface';
 import { Order } from './order.model';
 import { generateTransactionId } from './order.utils';
 import { SSLCommerzService } from './sslcommerz.service';
@@ -20,163 +20,135 @@ const createOrder = async (
 ): Promise<TOrderResponse> => {
   const user = await User.isUserExists(userEmail);
 
-  // check if user is exists
-  if (!user) {
-    throw new HttpError(404, 'User not found');
-  }
-
-  // check is user is banned
-  if (user.status === 'banned') {
+  if (!user) throw new HttpError(404, 'User not found');
+  if (user.status === 'banned')
     throw new HttpError(
       403,
       'Your account is banned. You cannot perform this action.',
     );
-  }
 
-  // set user id
   payload.userId = user._id;
 
-  const product = await Product.findOne({ _id: payload.product });
-
-  // check if product is exists
-  if (!product) {
-    throw new HttpError(404, 'No product found with ID');
+  if (!payload.products || payload.products.length === 0) {
+    throw new HttpError(400, 'At least one product is required.');
   }
 
-  // check if product is available
-  if (product.quantity <= 0) {
-    throw new HttpError(
-      400,
-      'Product is currently unavailable. Please check back later or choose another product.',
+  const productIds = payload.products.map((item) => item.productId);
+  const products = await Product.find({ _id: { $in: productIds } });
+
+  if (products.length !== payload.products.length) {
+    throw new HttpError(404, 'One or more products not found.');
+  }
+
+  let totalAmount = 0;
+
+  for (const item of payload.products) {
+    const product = products.find(
+      (p) => p._id.toString() === item.productId.toString(),
     );
+    if (!product)
+      throw new HttpError(404, `Product with ID ${item.productId} not found.`);
+    if (product.quantity <= 0)
+      throw new HttpError(400, `Product "${product.title}" is out of stock.`);
+    if (item.quantity > product.quantity) {
+      throw new HttpError(
+        400,
+        `Only ${product.quantity} units of "${product.title}" are available.`,
+      );
+    }
+
+    totalAmount += product.price * item.quantity;
   }
 
-  if (payload.quantity > product.quantity) {
-    throw new HttpError(
-      400,
-      `Only ${product.quantity} units of this product are available. Please update your order quantity`,
-    );
-  }
-
-  // total amount of product
-  const totalAmount = product.price * payload.quantity;
   payload.totalAmount = totalAmount;
 
-  // handle shipping address
-  let finalShippingAddress: TShippingAddressDetails | null = null;
-
-  if (!payload.shippingAddress && !payload.shippingAddressDetails) {
+  if (!payload.shippingAddressDetails) {
     throw new HttpError(400, 'Shipping address is required.');
   }
 
-  if (payload.shippingAddress) {
-    // check if default shipping address
-    const defaultShippingAddress = await ShippingAddress.findOne({
-      _id: payload.shippingAddress,
+  const finalShippingAddress = payload.shippingAddressDetails;
+
+  // SSLCommerz Payment Handling
+  const transactionId = generateTransactionId();
+
+  try {
+    const paymentResponse = await SSLCommerzService.initiatePayment({
+      total_amount: totalAmount,
+      currency: 'USD',
+      tran_id: transactionId,
+      success_url: `http://localhost:3000/api/v1/payments/payment-success/${transactionId}`,
+      fail_url: `http://localhost:3000/api/v1/payments/payment-fail/${transactionId}`,
+      cancel_url: `http://localhost:3000/api/v1/payments/payment-cancel/${transactionId}`,
+      shipping_method: 'Courier',
+      product_name: products.map((p) => p.title).join(', '),
+      product_category: products.map((p) => p.category).join(', '),
+      product_profile: 'general',
+      cus_name: user.name || 'Unknown',
+      cus_email: user.email || 'customer@example.com',
+      cus_add1: finalShippingAddress.address || '',
+      cus_city: finalShippingAddress.city || '',
+      cus_postcode: finalShippingAddress.postalCode || '',
+      cus_country: finalShippingAddress.country || '',
+      cus_phone: finalShippingAddress.phone || '',
+      ship_name: user.name || 'Unknown',
+      ship_add1: finalShippingAddress.address || '',
+      ship_city: finalShippingAddress.city || '',
+      ship_postcode: finalShippingAddress.postalCode || '',
+      ship_country: finalShippingAddress.country || '',
     });
 
-    if (!defaultShippingAddress) {
-      throw new HttpError(404, 'No default shipping address found with ID');
-    }
+    payload.transactionId = transactionId;
 
-    finalShippingAddress = {
-      name: defaultShippingAddress.name,
-      phone: defaultShippingAddress.phone,
-      address: defaultShippingAddress.address,
-      postalCode: defaultShippingAddress.postalCode,
-      city: defaultShippingAddress.city,
-      country: defaultShippingAddress.country,
-    };
-  } else if (payload.shippingAddressDetails) {
-    finalShippingAddress = payload.shippingAddressDetails;
-  }
+    const createdOrder = await Order.create({
+      ...payload,
+      shippingAddressDetails: finalShippingAddress,
+    });
 
-  // payment method integration
-  // if payment method is sslCommerz, initiate the payment
-  if (payload.paymentMethod === 'sslCommerz') {
-    const transactionId = generateTransactionId();
-
-    try {
-      const paymentResponse = await SSLCommerzService.initiatePayment({
-        total_amount: totalAmount,
-        currency: 'BDT',
-        tran_id: transactionId,
-        success_url: (config.success_url as string) || '',
-        fail_url: (config.fail_url as string) || '',
-        cancel_url: (config.cancel_url as string) || '',
-        shipping_method: 'Courier',
-        product_name: product.title || '',
-        product_category: product.category || '',
-        product_profile: 'general',
-        cus_name: user.name || 'Unknown',
-        cus_email: user.email || 'customer@example.com',
-        cus_add1: finalShippingAddress?.address || '',
-        cus_city: finalShippingAddress?.city || '',
-        cus_postcode: finalShippingAddress?.postalCode || '',
-        cus_country: finalShippingAddress?.country || '',
-        cus_phone: finalShippingAddress?.phone || '',
-        ship_name: user.name || 'Unknown',
-        ship_add1: finalShippingAddress?.address || '',
-        ship_city: finalShippingAddress?.city || '',
-        ship_postcode: finalShippingAddress?.postalCode || '',
-        ship_country: finalShippingAddress?.country || '',
-      });
-
-      payload.transactionId = transactionId;
-
-      const createdOrder = await Order.create({
-        ...payload,
-        shippingAddressDetails: finalShippingAddress,
-        // transactionId,
-      });
-
-      // decrease product quantity after creating the order
+    // Decrease product quantity
+    for (const item of payload.products) {
       await Product.findOneAndUpdate(
-        { _id: payload.product },
-        { $inc: { quantity: -payload.quantity } },
+        { _id: item.productId },
+        { $inc: { quantity: -item.quantity } },
       );
-
-      return {
-        createdOrder,
-        paymentUrl: paymentResponse,
-      };
-    } catch (err) {
-      throw new HttpError(500, 'Failed to initiate payment.');
     }
+
+    return {
+      createdOrder,
+      paymentUrl: paymentResponse,
+    };
+  } catch (err) {
+    throw new HttpError(500, 'Failed to initiate payment.');
   }
-
-  // create the order
-  const createdOrder = await Order.create({
-    ...payload,
-    shippingAddressDetails: finalShippingAddress,
-  });
-
-  // decrease product quantity after creating the order
-  await Product.findOneAndUpdate(
-    { _id: payload.product },
-    { $inc: { quantity: -payload.quantity } },
-  );
-
-  return { createdOrder, paymentUrl: '' };
 };
 
 const getAllOrders = async (query: Record<string, unknown>) => {
-  const orderQuery = new QueryBuilder(Order.find().populate('userId'), query)
+  const orderQuery = new QueryBuilder(
+    Order.find().populate('userId').populate('products.productId'),
+    query,
+  )
     .filter()
     .sortBy()
     .paginate();
 
-  const orders = await orderQuery.modelQuery;
+  const meta = await orderQuery.countTotal();
+  const result = await orderQuery.modelQuery;
 
-  if (orders.length === 0) {
+  // const orders = await orderQuery.modelQuery;
+
+  if (result.length === 0) {
     throw new HttpError(404, 'No order were found in the database');
   }
 
-  return orders;
+  return {
+    meta,
+    result,
+  };
 };
 
 const getOrderById = async (id: string) => {
-  const order = await Order.findById(id).populate('userId');
+  const order = await Order.findById(id)
+    .populate('userId')
+    .populate('products.productId');
 
   if (!order) {
     throw new HttpError(404, 'No order found with ID');
@@ -185,8 +157,19 @@ const getOrderById = async (id: string) => {
   return order;
 };
 
-const getUserOrdersHistory = async (userEmail: string) => {
-  const user = await User.isUserExists(userEmail);
+const getUserOrdersHistory = async (
+  loggedInUserEmail: string,
+  requestedUserEmail: string,
+  query: Record<string, unknown>,
+) => {
+  if (loggedInUserEmail !== requestedUserEmail) {
+    throw new HttpError(
+      403,
+      'You are not authorized to view this order history',
+    );
+  }
+
+  const user = await User.isUserExists(loggedInUserEmail);
 
   // check if user is exits
   if (!user) {
@@ -201,13 +184,23 @@ const getUserOrdersHistory = async (userEmail: string) => {
     );
   }
 
-  const userOrders = await Order.find({ userId: user._id }).populate('userId');
+  const userOrderQuery = new QueryBuilder(
+    Order.find({ userId: user._id }).populate('userId'),
+    query,
+  );
 
-  if (!userOrders || userOrders.length === 0) {
+  // const userOrders = await Order.find({ userId: user._id }).populate('userId');
+  const meta = await userOrderQuery.countTotal();
+  const result = await userOrderQuery.modelQuery;
+
+  if (!result || result.length === 0) {
     throw new HttpError(404, 'No order were found this user');
   }
 
-  return userOrders;
+  return {
+    meta,
+    result,
+  };
 };
 
 const updateOrderStatusById = async (id: string, status: string) => {
