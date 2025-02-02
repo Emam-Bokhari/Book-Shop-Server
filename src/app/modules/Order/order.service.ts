@@ -1,4 +1,3 @@
-import app from '../../../app';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { HttpError } from '../../errors/HttpError';
 import { Product } from '../Product/product.model';

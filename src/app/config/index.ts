@@ -10,17 +10,5 @@ export default {
   bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
   store_id: process.env.STORE_ID,
   store_pass: process.env.STORE_PASS,
-  success_url:
-    process.env.NODE_ENV === 'production'
-      ? process.env.PRODUCTION_SUCCESS_URL
-      : process.env.SUCCESS_URL,
-  fail_url:
-    process.env.NODE_ENV === 'production'
-      ? process.env.PRODUCTION_SUCCESS_URL
-      : process.env.FAIL_URL,
-  cancel_url:
-    process.env.NODE_ENV === 'production'
-      ? process.env.PRODUCTION_CANCEL_URL
-      : process.env.CANCEL_URL,
   jwt_access_secret: process.env.JWT_ACCESS_SECRET,
 };
