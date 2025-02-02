@@ -13,6 +13,7 @@ const user_constant_1 = require("../User/user.constant");
 const router = express_1.default.Router();
 router.post('/', (0, auth_1.auth)(user_constant_1.USER_ROLE.admin), (0, validateRequestSchema_1.validateRequestSchema)(product_validation_1.ProductValidationSchema.createProductValidationSchema), product_controller_1.ProductControllers.createProductController);
 router.get('/', product_controller_1.ProductControllers.getAllProductsController);
+router.get('/all', product_controller_1.ProductControllers.getProductsNoDefaultPaginationController);
 router.get('/:id', product_controller_1.ProductControllers.getProductController);
 router.patch('/:id', (0, auth_1.auth)(user_constant_1.USER_ROLE.admin), (0, validateRequestSchema_1.validateRequestSchema)(product_validation_1.ProductValidationSchema.updateProductValidationSchema), product_controller_1.ProductControllers.updateProductController);
 router.delete('/:id', (0, auth_1.auth)(user_constant_1.USER_ROLE.admin), product_controller_1.ProductControllers.deleteProductController);

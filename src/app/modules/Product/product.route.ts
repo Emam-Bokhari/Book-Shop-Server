@@ -16,6 +16,8 @@ router.post(
 
 router.get('/', ProductControllers.getAllProductsController);
 
+router.get('/all', ProductControllers.getProductsNoDefaultPaginationController);
+
 router.get('/:id', ProductControllers.getProductController);
 
 router.patch(

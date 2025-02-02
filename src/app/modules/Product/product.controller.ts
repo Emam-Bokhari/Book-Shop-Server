@@ -27,6 +27,18 @@ const getAllProductsController = asyncHandler(async (req, res) => {
   });
 });
 
+const getProductsNoDefaultPaginationController = asyncHandler(async (req, res) => {
+
+  const products = await ProductServices.getProductsNoDefaultPagination();
+
+  sendResponse(res, {
+    success: true,
+    message: 'Products retrieved successfully',
+    statusCode: 200,
+    data: products,
+  });
+});
+
 const getProductController = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const product = await ProductServices.getProductById(id);
@@ -70,6 +82,7 @@ const deleteProductController = asyncHandler(async (req, res) => {
 export const ProductControllers = {
   createProductController,
   getAllProductsController,
+  getProductsNoDefaultPaginationController,
   getProductController,
   updateProductController,
   deleteProductController,

@@ -34,6 +34,15 @@ const getAllProductsController = (0, asyncHandler_1.asyncHandler)((req, res) => 
         data: result.result,
     });
 }));
+const getProductsNoDefaultPaginationController = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const products = yield product_service_1.ProductServices.getProductsNoDefaultPagination();
+    (0, sendResponse_1.sendResponse)(res, {
+        success: true,
+        message: 'Products retrieved successfully',
+        statusCode: 200,
+        data: products,
+    });
+}));
 const getProductController = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
     const product = yield product_service_1.ProductServices.getProductById(id);
@@ -68,6 +77,7 @@ const deleteProductController = (0, asyncHandler_1.asyncHandler)((req, res) => _
 exports.ProductControllers = {
     createProductController,
     getAllProductsController,
+    getProductsNoDefaultPaginationController,
     getProductController,
     updateProductController,
     deleteProductController,

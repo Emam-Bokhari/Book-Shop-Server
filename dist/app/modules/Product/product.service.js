@@ -37,6 +37,13 @@ const getAllProducts = (query) => __awaiter(void 0, void 0, void 0, function* ()
         result,
     };
 });
+const getProductsNoDefaultPagination = () => __awaiter(void 0, void 0, void 0, function* () {
+    const products = yield product_model_1.Product.find();
+    if (products.length === 0) {
+        throw new HttpError_1.HttpError(404, 'No product were found in the database');
+    }
+    return products;
+});
 const getProductById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const product = yield product_model_1.Product.findById(id);
     if (!product) {
@@ -61,6 +68,7 @@ const deleteProductById = (id) => __awaiter(void 0, void 0, void 0, function* ()
 exports.ProductServices = {
     createProduct,
     getAllProducts,
+    getProductsNoDefaultPagination,
     getProductById,
     updateProductById,
     deleteProductById,
