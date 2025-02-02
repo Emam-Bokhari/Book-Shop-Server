@@ -4,8 +4,7 @@ This **Book Shop Backend** is application designed to manage `books`, `customers
 
 ### 🌐 Live Deployment & 🎥 Explanation Video Link
 
-- **Live Site**: [Visit the Deployment](https://example.com)
-- **Video Explanation**: [Watch the Video](https://example.com)
+- **Live Site**: [Visit the Deployment](https://book-shop-server-3trk.vercel.app)
 
 ## 🔑 Key Features
 
@@ -80,23 +79,10 @@ DATABASE_URL=mongodb+srv://book-shop:l8Fvv42z7tcTRt8M@cluster0.kndeci6.mongodb.n
 BCRYPT_SALT_ROUNDS=12
 STORE_ID=dream67950c298b8c2
 STORE_PASS=dream67950c298b8c2@ssl
-SUCCESS_URL=http://localhost:5173/success
-FAIL_URL=http://localhost:5173/fail
-CANCEL_URL= https://yourdomain.com/api/payment/cancel
-PRODUCTION_SUCCESS_URL=https://your-production-domain.com/success
-PRODUCTION_FAIL_URL=https://your-production-domain.com/fail
-PRODUCTION_CANCEL_URL=https://your-production-domain.com/fail
 JWT_ACCESS_SECRET=9e32781d05012e2a584089f77efad27f71788034266983baeda45d366ad13a49d1b2c4431b4cf1434d792ae0b79a54ad189d9d9904e645570ccc325987a74531
 ```
 
-### 5. Admin Login Credentials
-
-To access the admin panel, use the following credentials:
-
-- **Email:** `admin@gmail.com`
-- **Password:** `admin123`
-
-### 6. Run the Application
+### 5. Run the Application
 
 Start the development server:
 
@@ -106,12 +92,12 @@ npm run start:dev
 
 Your application should now be running at `http://localhost:3000`.
 
-### 7. Access the Application
+### 6. Access the Application
 
 - Visit the site in your browser at `http://localhost:3000`.
 - You can now use the application to create, update, delete, and manage blogs based on the user roles.
 
-### 8. Additional Notes
+### 7. Additional Notes
 
 - To access protected routes, use Bearer Tokens for authentication.
 
