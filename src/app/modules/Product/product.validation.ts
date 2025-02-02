@@ -43,7 +43,7 @@ const createProductValidationSchema = z.object({
       'french',
       'german',
     ]),
-    pages: z.number().int().optional(),
+    pages: z.number().nullable().optional(),
     rating: z
       .number()
       .int()
@@ -124,7 +124,7 @@ const updateProductValidationSchema = z.object({
         'german',
       ])
       .optional(),
-    pages: z.number().int().optional(),
+    pages: z.number().nullable().optional(),
     rating: z.number().int().max(5, 'Rating can not exceed 5').optional(),
     discount: z
       .number()
