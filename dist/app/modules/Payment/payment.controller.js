@@ -14,17 +14,17 @@ const asyncHandler_1 = require("../../utils/global/asyncHandler");
 const paymentSuccessController = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // const transactionId = req.params.transactionId;
     // console.log(transactionId);
-    res.redirect(`http://localhost:5173/payment-success`);
+    res.redirect(`https://book-shop-client-mauve.vercel.app/payment-success`);
 }));
 const paymentFailController = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // const transactionId = req.params.transactionId;
     // console.log(transactionId);
-    res.redirect(`http://localhost:5173/payment-fail`);
+    res.redirect(`https://book-shop-client-mauve.vercel.app/payment-fail`);
 }));
 const paymentCancelController = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // const transactionId = req.params.transactionId;
     // console.log(transactionId);
-    res.redirect(`http://localhost:5173/payment-cancel`);
+    res.redirect(`https://book-shop-client-mauve.vercel.app/payment-cancel`);
 }));
 exports.PaymentControllers = {
     paymentSuccessController,
