@@ -24,12 +24,45 @@ const productSchema = new Schema<TProduct>(
           'science',
           'religion',
           'history',
+          "biography",
+          "art",
+          "poetry",
+          "romance",
+          "mystery",
+          "fantasy",
+          "travel",
+          "selfHelp",
+          "psychology",
+          "politics",
+          "cookbook",
+          "humor",
+          "graphicNovels",
+          "health",
+          "technology",
+          "business",
+          "education",
+          "sports",
         ],
         message: '{VALUE} is not valid category',
       },
       required: true,
     },
     author: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    aboutAuthor: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    shipping: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    returnsPolicy: {
       type: String,
       trim: true,
       required: true,
@@ -44,8 +77,8 @@ const productSchema = new Schema<TProduct>(
       trim: true,
       required: true,
     },
-    image: {
-      type: String,
+    images: {
+      type: [String],
       required: true,
     },
     publisher: {
@@ -72,6 +105,7 @@ const productSchema = new Schema<TProduct>(
           'spanish',
           'french',
           'german',
+          "italian", "portuguese", "russian", "chinese", "japanese", "korean", "turkish", "urdu", "swedish", "dutch", "polish", "greek", "hebrew", "persian", "thai", "vietnamese"
         ],
         message: '{VALUE} is not a valid language',
       },
@@ -93,7 +127,7 @@ const productSchema = new Schema<TProduct>(
     format: {
       type: String,
       enum: {
-        values: ['hardcover', 'paperback', 'eBook', 'audioBook'],
+        values: ['hardcover', 'paperback', 'eBook', 'audioBook', "pdf", "audiobookMP3", "audiobookCD", "comicBook", "interactiveBook", "flipBook", "boxSet", "deluxeEdition"],
         message: '{VALUE} is not a valid format',
       },
       required: true,

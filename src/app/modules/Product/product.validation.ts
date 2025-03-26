@@ -12,8 +12,29 @@ const createProductValidationSchema = z.object({
       'science',
       'religion',
       'history',
+      "biography",
+      "art",
+      "poetry",
+      "romance",
+      "mystery",
+      "fantasy",
+      "travel",
+      "selfHelp",
+      "psychology",
+      "politics",
+      "cookbook",
+      "humor",
+      "graphicNovels",
+      "health",
+      "technology",
+      "business",
+      "education",
+      "sports",
     ]),
     author: z.string().trim().max(50, 'Author can not exceed 50 characters'),
+    aboutAuthor: z.string().trim(),
+    shipping: z.string().trim(),
+    returnsPolicy: z.string().trim(),
     description: z
       .string()
       .trim()
@@ -23,7 +44,7 @@ const createProductValidationSchema = z.object({
       .int()
       .min(1, 'Price is required and must be price at least 1')
       .max(10000, 'Price can not exceed 10000'),
-    image: z.string(),
+    images: z.array(z.string()),
     publisher: z
       .string()
       .trim()
@@ -42,6 +63,7 @@ const createProductValidationSchema = z.object({
       'spanish',
       'french',
       'german',
+      "italian", "portuguese", "russian", "chinese", "japanese", "korean", "turkish", "urdu", "swedish", "dutch", "polish", "greek", "hebrew", "persian", "thai", "vietnamese"
     ]),
     pages: z.number().nullable().optional(),
     rating: z
@@ -55,7 +77,7 @@ const createProductValidationSchema = z.object({
       .min(0, 'Discount cannot be negative')
       .max(100, 'Discount cannot exceed 100')
       .optional(),
-    format: z.enum(['hardcover', 'paperback', 'eBook', 'audioBook']),
+    format: z.enum(['hardcover', 'paperback', 'eBook', 'audioBook', "pdf", "audiobookMP3", "audiobookCD", "comicBook", "interactiveBook", "flipBook", "boxSet", "deluxeEdition"]),
     quantity: z
       .number()
       .int()
@@ -82,6 +104,24 @@ const updateProductValidationSchema = z.object({
         'science',
         'religion',
         'history',
+        "biography",
+        "art",
+        "poetry",
+        "romance",
+        "mystery",
+        "fantasy",
+        "travel",
+        "selfHelp",
+        "psychology",
+        "politics",
+        "cookbook",
+        "humor",
+        "graphicNovels",
+        "health",
+        "technology",
+        "business",
+        "education",
+        "sports",
       ])
       .optional(),
     author: z
@@ -89,13 +129,16 @@ const updateProductValidationSchema = z.object({
       .trim()
       .max(50, 'Author can not exceed 50 characters')
       .optional(),
+    aboutAuthor: z.string().trim().optional(),
+    shipping: z.string().trim().optional(),
+    returnsPolicy: z.string().trim().optional(),
     description: z
       .string()
       .trim()
       .max(1000, 'Description can not exceed 1000 characters')
       .optional(),
     price: z.number().int().max(10000, 'Price can not exceed 10000').optional(),
-    image: z.string().optional(),
+    images: z.array(z.string()).optional(),
     publisher: z
       .string()
       .trim()
@@ -122,6 +165,7 @@ const updateProductValidationSchema = z.object({
         'spanish',
         'french',
         'german',
+        "italian", "portuguese", "russian", "chinese", "japanese", "korean", "turkish", "urdu", "swedish", "dutch", "polish", "greek", "hebrew", "persian", "thai", "vietnamese"
       ])
       .optional(),
     pages: z.number().nullable().optional(),
@@ -131,7 +175,7 @@ const updateProductValidationSchema = z.object({
       .int()
       .max(100, 'Discount cannot exceed 100')
       .optional(),
-    format: z.enum(['hardcover', 'paperback', 'eBook', 'audioBook']).optional(),
+    format: z.enum(['hardcover', 'paperback', 'eBook', 'audioBook', "pdf", "audiobookMP3", "audiobookCD", "comicBook", "interactiveBook", "flipBook", "boxSet", "deluxeEdition"]).optional(),
     quantity: z
       .number()
       .int()
