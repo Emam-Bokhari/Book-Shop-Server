@@ -15,9 +15,9 @@ router.post(
 );
 
 router.get(
-  '/order-history/:email',
+  '/byUser',
   auth(USER_ROLE.user, USER_ROLE.admin),
-  OrderControllers.getUserOrdersHistoryController,
+  OrderControllers.getOrderHistoryBySpecificUserController,
 );
 
 router.get('/', auth(USER_ROLE.admin), OrderControllers.getAllOrdersController);

@@ -156,50 +156,22 @@ const getOrderById = async (id: string) => {
   return order;
 };
 
-const getUserOrdersHistory = async (
-  loggedInUserEmail: string,
-  requestedUserEmail: string,
-  query: Record<string, unknown>,
-) => {
-  if (loggedInUserEmail !== requestedUserEmail) {
-    throw new HttpError(
-      403,
-      'You are not authorized to view this order history',
-    );
-  }
-
-  const user = await User.isUserExists(loggedInUserEmail);
-
-  // check if user is exits
+const getOrderHistoryBySpecificUser = async (userEmail: string) => {
+  const user = await User.isUserExists(userEmail);
   if (!user) {
     throw new HttpError(404, 'User not found');
   }
 
-  // check if user is banned
-  if (user.status === 'banned') {
-    throw new HttpError(
-      403,
-      'Your account has been banned, and access is restricted.',
-    );
-  }
-
-  const userOrderQuery = new QueryBuilder(
-    Order.find({ userId: user._id }).populate('userId'),
-    query,
+  const orders = await Order.find({ userId: user._id }).populate(
+    'userId',
+    '_id name identifier role',
   );
 
-  // const userOrders = await Order.find({ userId: user._id }).populate('userId');
-  const meta = await userOrderQuery.countTotal();
-  const result = await userOrderQuery.modelQuery;
-
-  if (!result || result.length === 0) {
-    throw new HttpError(404, 'No order were found this user');
+  if (orders.length === 0) {
+    throw new HttpError(404, 'No order history were found provide this user ID');
   }
 
-  return {
-    meta,
-    result,
-  };
+  return orders;
 };
 
 const updateOrderStatusById = async (id: string, status: string) => {
@@ -226,6 +198,6 @@ export const OrderServices = {
   createOrder,
   getAllOrders,
   getOrderById,
-  getUserOrdersHistory,
+  getOrderHistoryBySpecificUser,
   updateOrderStatusById,
 };
