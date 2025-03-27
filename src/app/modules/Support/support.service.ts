@@ -41,7 +41,7 @@ const deleteSupportById = async (id: string) => {
     return deletedSupport;
 };
 
-export const ContactServices = {
+export const SupportServices = {
     createSupport,
     getAllSupports,
     getSupportById,
