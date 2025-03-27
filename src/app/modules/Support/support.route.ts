@@ -1,30 +1,35 @@
 import express from 'express';
 import { USER_ROLE } from '../User/user.constant';
+import { validateRequestSchema } from '../../middlewares/validateRequestSchema';
+import { SupportValidationSchema } from './support.validation';
+import { SupportControllers } from './support.controller';
+import { auth } from '../../middlewares/auth';
 
 const router = express.Router();
 
 router.post(
     '/',
-    validateRequestSchema(ContactValidationSchema.createContactValidationSchema),
-    ContactControllers.createContactController,
+    auth(USER_ROLE.user),
+    validateRequestSchema(SupportValidationSchema.createSupportValidationSchema),
+    SupportControllers.createSupportController,
 );
 
 router.get(
     '/',
     auth(USER_ROLE.admin),
-    ContactControllers.getAllContactsController,
+    SupportControllers.getAllSupportsController,
 );
 
 router.get(
     '/:id',
     auth(USER_ROLE.admin),
-    ContactControllers.getContactController,
+    SupportControllers.getSupportController,
 );
 
 router.delete(
     '/:id',
     auth(USER_ROLE.admin),
-    ContactControllers.deleteContactController,
+    SupportControllers.deleteSupportController,
 );
 
-export const ContactRoutes = router;
+export const SupportRoutes = router;

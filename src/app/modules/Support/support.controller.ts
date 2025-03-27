@@ -50,7 +50,7 @@ const deleteSupportController = asyncHandler(async (req, res) => {
     });
 });
 
-export const ContactControllers = {
+export const SupportControllers = {
     createSupportController,
     getAllSupportsController,
     getSupportController,
