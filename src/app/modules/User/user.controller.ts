@@ -27,11 +27,22 @@ const getUserController = asyncHandler(async (req, res) => {
   });
 });
 
-const updateUserController = asyncHandler(async (req, res) => {
-  const id = req.params.id;
+const getMeController = asyncHandler(async (req, res) => {
   const userEmail = req.user.email;
-  const { name } = req.body;
-  const updatedUser = await UserServices.updateUserById(id, name, userEmail);
+  const user = await UserServices.getMe(userEmail);
+
+  sendResponse(res, {
+    success: true,
+    message: 'User profile retrieved successfully',
+    statusCode: 200,
+    data: user,
+  });
+});
+
+const updateUserController = asyncHandler(async (req, res) => {
+  const userEmail = req.user.email;
+  const updatedPayload = req.body;
+  const updatedUser = await UserServices.updateUser(updatedPayload, userEmail);
 
   sendResponse(res, {
     success: true,
@@ -82,6 +93,7 @@ const deleteUserController = asyncHandler(async (req, res) => {
 export const UserControllers = {
   getAllUsersController,
   getUserController,
+  getMeController,
   updateUserController,
   updateUserStatusController,
   updateUserRoleController,

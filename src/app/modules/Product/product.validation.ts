@@ -35,6 +35,7 @@ const createProductValidationSchema = z.object({
     aboutAuthor: z.string().trim(),
     shipping: z.string().trim(),
     returnsPolicy: z.string().trim(),
+    termsOfSale: z.string().trim(),
     description: z
       .string()
       .trim()
@@ -132,6 +133,7 @@ const updateProductValidationSchema = z.object({
     aboutAuthor: z.string().trim().optional(),
     shipping: z.string().trim().optional(),
     returnsPolicy: z.string().trim().optional(),
+    termsOfSale: z.string().trim().optional(),
     description: z
       .string()
       .trim()

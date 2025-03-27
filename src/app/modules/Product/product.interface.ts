@@ -31,6 +31,7 @@ export type TProduct = {
   aboutAuthor: string;
   shipping: string;
   returnsPolicy: string;
+  termsOfSale: string;
   description: string;
   price: number;
   images: string[];

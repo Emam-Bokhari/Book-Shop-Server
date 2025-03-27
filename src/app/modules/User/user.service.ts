@@ -1,5 +1,6 @@
 import QueryBuilder from '../../builder/QueryBuilder';
 import { HttpError } from '../../errors/HttpError';
+import { TUser } from './user.interface';
 import { User } from './user.model';
 
 const getAllUsers = async (query: Record<string, unknown>) => {
@@ -32,34 +33,36 @@ const getUserById = async (id: string) => {
   return user;
 };
 
-const updateUserById = async (id: string, name: string, userEmail: string) => {
-  const user = await User.findOne({ _id: id, isDeleted: false });
+const getMe = async (userEmail: string) => {
+  if (!userEmail) {
+    throw new Error('userEmail is required to retrieve user information.');
+  }
 
-  // check if user is exists
+  // check if the user exists
+  const existingUser = await User.isUserExists(userEmail);
+
+  if (!existingUser) {
+    throw new Error('User not found.');
+  }
+
+  const user = await User.findOne({ email: userEmail }).select('-password');
+
+  return user;
+};
+
+const updateUser = async (payload: Partial<TUser>, userEmail: string) => {
+  const user = await User.isUserExists(userEmail);
   if (!user) {
-    throw new HttpError(404, 'No user found with ID');
+    throw new HttpError(404, 'User not found');
   }
 
-  // check if user is banned
-  if (user.status === 'banned') {
-    throw new HttpError(
-      403,
-      'Your account is banned. You cannot perform this action.',
-    );
-  }
-
-  // check if the email of the logged-in user matches the user
-  if (user.email !== userEmail) {
-    throw new HttpError(403, 'You are not allowed to update this user');
-  }
-
-  const updatedUser = await User.findOneAndUpdate(
-    { _id: id, isDeleted: false },
-    { name: name },
+  const updatedProfile = await User.findOneAndUpdate(
+    { email: userEmail },
+    payload,
     { new: true, runValidators: true },
   );
 
-  return updatedUser;
+  return updatedProfile;
 };
 
 const updateUserStatusById = async (id: string, status: string) => {
@@ -141,7 +144,8 @@ const deleteUserById = async (id: string) => {
 export const UserServices = {
   getAllUsers,
   getUserById,
-  updateUserById,
+  getMe,
+  updateUser,
   updateUserStatusById,
   updateUserRoleById,
   deleteUserById,

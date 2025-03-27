@@ -7,10 +7,17 @@ const router = express.Router();
 
 router.get('/', auth(USER_ROLE.admin), UserControllers.getAllUsersController);
 
+router.get(
+  '/me',
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  UserControllers.getMeController,
+);
+
 router.get('/:id', auth(USER_ROLE.admin), UserControllers.getUserController);
 
+
 router.patch(
-  '/:id',
+  '/update-profile',
   auth(USER_ROLE.admin, USER_ROLE.user),
   UserControllers.updateUserController,
 );

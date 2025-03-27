@@ -8,6 +8,13 @@ export interface TUser extends Document {
   password: string;
   role?: 'user' | 'admin';
   status?: 'active' | 'banned';
+  image?: string;
+  phone?: string;
+  age?: string;
+  gender?: "male" | "female";
+  country?: string;
+  city?: string;
+  postalCode?: string;
   isDeleted?: false;
 }
 

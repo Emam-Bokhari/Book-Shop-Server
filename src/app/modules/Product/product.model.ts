@@ -67,6 +67,11 @@ const productSchema = new Schema<TProduct>(
       trim: true,
       required: true,
     },
+    termsOfSale: {
+      type: String,
+      trim: true,
+      required: true,
+    },
     description: {
       type: String,
       trim: true,

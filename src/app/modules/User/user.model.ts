@@ -42,6 +42,37 @@ const userSchema = new Schema<TUser, UserModel>(
       },
       default: 'active',
     },
+    image: {
+      type: String,
+      trim: true,
+    },
+    phone: {
+      type: String,
+      trim: true,
+    },
+    age: {
+      type: String,
+      trim: true,
+    },
+    gender: {
+      type: String,
+      enum: {
+        values: ["male", "female"],
+        message: '{VALUE} is not a valid gender'
+      }
+    },
+    city: {
+      type: String,
+      trim: true,
+    },
+    country: {
+      type: String,
+      trim: true,
+    },
+    postalCode: {
+      type: String,
+      trim: true,
+    },
     isDeleted: {
       type: Boolean,
       default: false,
