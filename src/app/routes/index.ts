@@ -8,6 +8,7 @@ import { PaymentRoutes } from '../modules/Payment/payment.route';
 import { SupportRoutes } from '../modules/Support/support.route';
 import { ContactRoutes } from '../modules/Contact/contact.route';
 import { BlogRoutes } from '../modules/Blog/blog.route';
+import { NewsletterRoutes } from '../modules/Newsletter/newsletter.route';
 
 const router = express.Router();
 
@@ -47,6 +48,10 @@ const moduleRoutes = [
   {
     path: '/blogs',
     route: BlogRoutes,
+  },
+  {
+    path: '/newsletters',
+    route: NewsletterRoutes,
   },
 ];
 
