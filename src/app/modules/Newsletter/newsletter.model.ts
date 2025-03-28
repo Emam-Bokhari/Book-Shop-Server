@@ -27,4 +27,4 @@ newsletterSchema.pre('findOne', excludeDeletedQuery);
 // aggregate middleware for soft delete by utils
 newsletterSchema.pre('aggregate', excludeDeletedAggregation);
 
-export const NewsLetter = model<TNewsletter>('Newsletter', newsletterSchema);
+export const Newsletter = model<TNewsletter>('Newsletter', newsletterSchema);
