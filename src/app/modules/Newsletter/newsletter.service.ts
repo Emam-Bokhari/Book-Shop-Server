@@ -29,7 +29,7 @@ const deleteNewsletterById = async (id: string) => {
     return deletedNewsletter;
 };
 
-export const NewsLetterServices = {
+export const NewsletterServices = {
     createNewsletter,
     getAllNewsletters,
     deleteNewsletterById,
