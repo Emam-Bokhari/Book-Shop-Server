@@ -33,7 +33,6 @@ const getAllProducts = async (query: Record<string, unknown>) => {
 const getProductsNoDefaultPagination = async () => {
   const products = await Product.find();
 
-
   if (products.length === 0) {
     throw new HttpError(404, 'No product were found in the database');
   }

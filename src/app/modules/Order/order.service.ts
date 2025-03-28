@@ -162,16 +162,17 @@ const getOrderHistoryBySpecificUser = async (userEmail: string) => {
     throw new HttpError(404, 'User not found');
   }
 
-  const orders = await Order.find({ userId: user._id }).populate(
-    'userId',
-    '_id name identifier role',
-  ).populate({
-    path: 'products.productId',
-
-  });
+  const orders = await Order.find({ userId: user._id })
+    .populate('userId', '_id name identifier role')
+    .populate({
+      path: 'products.productId',
+    });
 
   if (orders.length === 0) {
-    throw new HttpError(404, 'No order history were found provide this user ID');
+    throw new HttpError(
+      404,
+      'No order history were found provide this user ID',
+    );
   }
 
   return orders;

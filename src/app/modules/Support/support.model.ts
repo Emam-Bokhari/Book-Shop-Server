@@ -1,47 +1,46 @@
 import { model, Schema } from 'mongoose';
 
 import {
-    excludeDeletedAggregation,
-    excludeDeletedQuery,
+  excludeDeletedAggregation,
+  excludeDeletedQuery,
 } from '../../utils/moduleSpecific/queryFilters';
 import { TSupport } from './support.interface';
 
-
 const supportSchema = new Schema<TSupport>(
-    {
-        name: {
-            type: String,
-            trim: true,
-            required: true,
-        },
-        email: {
-            type: String,
-            trim: true,
-            required: true,
-        },
-        phone: {
-            type: String,
-            trim: true,
-        },
-        issueType: {
-            type: String,
-            trim: true,
-            required: true,
-        },
-        issueDescription: {
-            type: String,
-            trim: true,
-            required: true,
-        },
-        isDeleted: {
-            type: Boolean,
-            default: false,
-        },
+  {
+    name: {
+      type: String,
+      trim: true,
+      required: true,
     },
-    {
-        timestamps: true,
-        versionKey: false,
+    email: {
+      type: String,
+      trim: true,
+      required: true,
     },
+    phone: {
+      type: String,
+      trim: true,
+    },
+    issueType: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    issueDescription: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    timestamps: true,
+    versionKey: false,
+  },
 );
 
 // query middleware for soft delete by utils

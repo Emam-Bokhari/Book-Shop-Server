@@ -57,9 +57,9 @@ const userSchema = new Schema<TUser, UserModel>(
     gender: {
       type: String,
       enum: {
-        values: ["male", "female"],
-        message: '{VALUE} is not a valid gender'
-      }
+        values: ['male', 'female'],
+        message: '{VALUE} is not a valid gender',
+      },
     },
     city: {
       type: String,

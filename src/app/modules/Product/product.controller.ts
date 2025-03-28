@@ -27,17 +27,18 @@ const getAllProductsController = asyncHandler(async (req, res) => {
   });
 });
 
-const getProductsNoDefaultPaginationController = asyncHandler(async (req, res) => {
+const getProductsNoDefaultPaginationController = asyncHandler(
+  async (req, res) => {
+    const products = await ProductServices.getProductsNoDefaultPagination();
 
-  const products = await ProductServices.getProductsNoDefaultPagination();
-
-  sendResponse(res, {
-    success: true,
-    message: 'Products retrieved successfully',
-    statusCode: 200,
-    data: products,
-  });
-});
+    sendResponse(res, {
+      success: true,
+      message: 'Products retrieved successfully',
+      statusCode: 200,
+      data: products,
+    });
+  },
+);
 
 const getProductController = asyncHandler(async (req, res) => {
   const id = req.params.id;

@@ -11,7 +11,7 @@ export interface TUser extends Document {
   image?: string;
   phone?: string;
   age?: string;
-  gender?: "male" | "female";
+  gender?: 'male' | 'female';
   country?: string;
   city?: string;
   postalCode?: string;

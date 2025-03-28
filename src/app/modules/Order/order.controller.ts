@@ -50,18 +50,19 @@ const getOrderController = asyncHandler(async (req, res) => {
   });
 });
 
+const getOrderHistoryBySpecificUserController = asyncHandler(
+  async (req, res) => {
+    const userEmail = req.user.email;
+    const orders = await OrderServices.getOrderHistoryBySpecificUser(userEmail);
 
-const getOrderHistoryBySpecificUserController = asyncHandler(async (req, res) => {
-  const userEmail = req.user.email;
-  const orders = await OrderServices.getOrderHistoryBySpecificUser(userEmail);
-
-  sendResponse(res, {
-    success: true,
-    message: 'Specific user wise order history are retrieved successfully',
-    statusCode: 200,
-    data: orders,
-  });
-});
+    sendResponse(res, {
+      success: true,
+      message: 'Specific user wise order history are retrieved successfully',
+      statusCode: 200,
+      data: orders,
+    });
+  },
+);
 
 const updateOrderStatusController = asyncHandler(async (req, res) => {
   const id = req.params.id;
