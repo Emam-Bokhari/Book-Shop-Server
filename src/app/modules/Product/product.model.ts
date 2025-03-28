@@ -125,10 +125,10 @@ const productSchema = new Schema<TProduct>(
       trim: true,
       required: true,
     },
-    discount: {
-      type: Number,
-      trim: true,
-    },
+    // discount: {
+    //   type: Number,
+    //   trim: true,
+    // },
     format: {
       type: String,
       enum: {

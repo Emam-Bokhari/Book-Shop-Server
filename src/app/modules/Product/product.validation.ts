@@ -72,12 +72,12 @@ const createProductValidationSchema = z.object({
       .int()
       .min(1, 'Rating is required and must be at least 1')
       .max(5, 'Rating can not exceed 5'),
-    discount: z
-      .number()
-      .int()
-      .min(0, 'Discount cannot be negative')
-      .max(100, 'Discount cannot exceed 100')
-      .optional(),
+    // discount: z
+    //   .number()
+    //   .int()
+    //   .min(0, 'Discount cannot be negative')
+    //   .max(100, 'Discount cannot exceed 100')
+    //   .optional(),
     format: z.enum(['hardcover', 'paperback', 'eBook', 'audioBook', "pdf", "audiobookMP3", "audiobookCD", "comicBook", "interactiveBook", "flipBook", "boxSet", "deluxeEdition"]),
     quantity: z
       .number()
@@ -147,12 +147,7 @@ const updateProductValidationSchema = z.object({
       .max(100, 'Publisher can not exceed 100 characters')
       .optional(),
     publishedDate: z
-      .string()
-      .regex(
-        /^\d{4}\d{2}\d{2}$/,
-        'Published date must be in YYYYMMDD format (e.g., 20250125)',
-      )
-      .optional(),
+      .string().optional(),
     edition: z
       .string()
       .trim()
@@ -172,11 +167,11 @@ const updateProductValidationSchema = z.object({
       .optional(),
     pages: z.number().nullable().optional(),
     rating: z.number().int().max(5, 'Rating can not exceed 5').optional(),
-    discount: z
-      .number()
-      .int()
-      .max(100, 'Discount cannot exceed 100')
-      .optional(),
+    // discount: z
+    //   .number()
+    //   .int()
+    //   .max(100, 'Discount cannot exceed 100')
+    //   .optional(),
     format: z.enum(['hardcover', 'paperback', 'eBook', 'audioBook', "pdf", "audiobookMP3", "audiobookCD", "comicBook", "interactiveBook", "flipBook", "boxSet", "deluxeEdition"]).optional(),
     quantity: z
       .number()
