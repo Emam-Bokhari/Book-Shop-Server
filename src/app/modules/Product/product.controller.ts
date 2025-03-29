@@ -27,6 +27,17 @@ const getAllProductsController = asyncHandler(async (req, res) => {
   });
 });
 
+const getProductsByCategoryController = asyncHandler(async (req, res) => {
+  const category = req.params.category;
+  const products = await ProductServices.getProductsByCategory(category);
+  sendResponse(res, {
+    success: true,
+    message: 'Category wise products are retrieved successfully',
+    statusCode: 200,
+    data: products,
+  });
+});
+
 const getProductsNoDefaultPaginationController = asyncHandler(
   async (req, res) => {
     const products = await ProductServices.getProductsNoDefaultPagination();
@@ -83,6 +94,7 @@ const deleteProductController = asyncHandler(async (req, res) => {
 export const ProductControllers = {
   createProductController,
   getAllProductsController,
+  getProductsByCategoryController,
   getProductsNoDefaultPaginationController,
   getProductController,
   updateProductController,

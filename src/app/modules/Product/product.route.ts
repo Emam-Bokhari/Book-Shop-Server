@@ -16,6 +16,11 @@ router.post(
 
 router.get('/', ProductControllers.getAllProductsController);
 
+router.get(
+  '/category/:category',
+  ProductControllers.getProductsByCategoryController,
+);
+
 router.get('/all', ProductControllers.getProductsNoDefaultPaginationController);
 
 router.get('/:id', ProductControllers.getProductController);

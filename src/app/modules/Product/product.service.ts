@@ -30,6 +30,14 @@ const getAllProducts = async (query: Record<string, unknown>) => {
   };
 };
 
+const getProductsByCategory = async (category: string) => {
+  const products = await Product.find({ category });
+  if (products.length === 0) {
+    throw new HttpError(404, 'No product record were found this category in the database');
+  }
+  return products;
+};
+
 const getProductsNoDefaultPagination = async () => {
   const products = await Product.find();
 
@@ -79,6 +87,7 @@ const deleteProductById = async (id: string) => {
 export const ProductServices = {
   createProduct,
   getAllProducts,
+  getProductsByCategory,
   getProductsNoDefaultPagination,
   getProductById,
   updateProductById,
