@@ -9,6 +9,7 @@ import { SupportRoutes } from '../modules/Support/support.route';
 import { ContactRoutes } from '../modules/Contact/contact.route';
 import { BlogRoutes } from '../modules/Blog/blog.route';
 import { NewsletterRoutes } from '../modules/Newsletter/newsletter.route';
+import { AnalyticsRoutes } from '../modules/Analytics/analytics.route';
 
 const router = express.Router();
 
@@ -52,6 +53,10 @@ const moduleRoutes = [
   {
     path: '/newsletters',
     route: NewsletterRoutes,
+  },
+  {
+    path: '/analytics',
+    route: AnalyticsRoutes,
   },
 ];
 
